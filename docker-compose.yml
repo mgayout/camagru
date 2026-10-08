@@ -4,4 +4,20 @@ services:
     container_name: mon-site
     ports:
       - "8080:80"
-    restart: unless-stopped
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:11
+    container_name: camagru-db
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: camagru
+      MARIADB_USER: camagru
+      MARIADB_PASSWORD: camagru
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  db_data:
