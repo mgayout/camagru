@@ -54,7 +54,7 @@ class Router
 		}
 
         if ($route['auth'] === false && $isAuthenticated) {
-			header('Location: /home');
+			header('Location: /camagru');
 			exit;
 		}
 

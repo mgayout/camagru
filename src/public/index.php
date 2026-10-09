@@ -5,13 +5,14 @@ require_once __DIR__ . '/../config/session.php';
 
 $router = new Router();
 
-$camagruController = new CamagruController();
+$homeController = new HomeController();
 $loginController = new LoginController();
 $registerController = new RegisterController();
 $logoutController = new LogoutController();
-$homeController = new HomeController();
+$camagruController = new CamagruController();
 
-$router->guest('/', [$camagruController, 'index']);
+
+$router->guest('/', [$homeController, 'index']);
 
 $router->guest('/login', [$loginController, 'index']);
 $router->post('/login', [$loginController, 'login']);
@@ -21,7 +22,7 @@ $router->post('/register', [$registerController, 'register']);
 
 $router->auth('/logout', [$logoutController, 'logout']);
 
-$router->auth('/home', [$homeController, 'index']);
+$router->auth('/camagru', [$camagruController, 'index']);
 
 $router->dispatch(
     $_SERVER['REQUEST_METHOD'],

@@ -52,7 +52,7 @@ class LoginController
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
 
-        header('Location: /home');
+        header('Location: /camagru');
         exit;
     }
 }
