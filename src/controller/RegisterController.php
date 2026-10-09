@@ -2,11 +2,22 @@
 
 class RegisterController
 {
+
+	private string $url = '/../view/main/register.php';
+
     public function index(): void
     {
         $errors = [];
 
-        require __DIR__ . '/../view/register.php';
+		$username = $_SESSION['username'] ?? null;
+		$user_id = $_SESSION['user_id'] ?? null;
+
+		$title = 'S\'inscrire';
+		$headerView	= isset($user_id) ? '/header-on.php' : '/header-off.php';
+		$mainView	= __DIR__ . $this->url;
+		$footerView	= '/footer.php';
+
+        require __DIR__ . '/../view/layout.php';
     }
 
     public function register(): void
@@ -40,7 +51,7 @@ class RegisterController
         }
 
         if (!empty($errors)) {
-            require __DIR__ . '/../view/register.php';
+            require __DIR__ . $this->url;
             return;
         }
 

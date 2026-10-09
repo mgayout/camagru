@@ -2,11 +2,22 @@
 
 class LoginController
 {
-    public function index(): void
+
+	private string $url = '/../view/main/login.php';
+    
+	public function index(): void
     {
         $errors = [];
 
-        require __DIR__ . '/../view/login.php';
+		$username = $_SESSION['username'] ?? null;
+		$user_id = $_SESSION['user_id'] ?? null;
+
+		$title = 'Se connecter';
+		$headerView	= isset($user_id) ? '/header-on.php' : '/header-off.php';
+		$mainView	= __DIR__ . $this->url;
+		$footerView	= '/footer.php';
+
+        require __DIR__ . '/../view/layout.php';
     }
 
     public function login(): void
@@ -25,7 +36,7 @@ class LoginController
         }
 
         if (!empty($errors)) {
-            require __DIR__ . '/../view/login.php';
+            require __DIR__ . $this->url;
             return;
         }
 
@@ -34,7 +45,7 @@ class LoginController
 
         if ($user === null || !password_verify($password, $user['password'])) {
             $errors[] = 'Email ou mot de passe incorrect.';
-            require __DIR__ . '/../view/login.php';
+            require __DIR__ . $this->url;
             return;
         }
 

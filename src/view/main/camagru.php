@@ -1,0 +1,1 @@
+<h1>Bonjour <?= $username ?? 'visiteur' ?> !</h1>
