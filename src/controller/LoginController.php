@@ -2,9 +2,15 @@
 
 class LoginController
 {
+    private function renderLogin(array $errors, ?string $username = null, ?int $user_id = null): void
+    {
+        $title = 'Se connecter';
+        $headerView = isset($user_id) ? HEADERON_VIEW : HEADEROFF_VIEW;
+        $mainView = LOGIN_VIEW;
 
-	private string $url = '/../view/main/login.php';
-    
+        require LAYOUT_VIEW;
+    }
+
 	public function index(): void
     {
         $errors = [];
@@ -12,12 +18,7 @@ class LoginController
 		$username = $_SESSION['username'] ?? null;
 		$user_id = $_SESSION['user_id'] ?? null;
 
-		$title = 'Se connecter';
-		$headerView	= isset($user_id) ? '/header-on.php' : '/header-off.php';
-		$mainView	= __DIR__ . $this->url;
-		$footerView	= '/footer.php';
-
-        require __DIR__ . '/../view/layout.php';
+		$this->renderLogin($errors, $username, $user_id);
     }
 
     public function login(): void
@@ -28,7 +29,7 @@ class LoginController
         $password = $_POST['password'] ?? '';
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors[] = 'L’adresse email est invalide.';
+            $errors[] = 'L\'adresse email est invalide.';
         }
 
         if ($password === '') {
@@ -36,7 +37,7 @@ class LoginController
         }
 
         if (!empty($errors)) {
-            require __DIR__ . $this->url;
+            require LAYOUT_VIEW;
             return;
         }
 
@@ -45,7 +46,7 @@ class LoginController
 
         if ($user === null || !password_verify($password, $user['password'])) {
             $errors[] = 'Email ou mot de passe incorrect.';
-            require __DIR__ . $this->url;
+            require LAYOUT_VIEW;
             return;
         }
 

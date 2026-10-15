@@ -2,8 +2,14 @@
 
 class RegisterController
 {
+    private function renderRegister(array $errors, ?string $username = null, ?int $user_id = null, ?string $email = null): void
+    {
+        $title = 'S\'inscrire';
+        $headerView = isset($user_id) ? HEADERON_VIEW : HEADEROFF_VIEW;
+        $mainView = REGISTER_VIEW;
 
-	private string $url = '/../view/main/register.php';
+        require LAYOUT_VIEW;
+    }
 
     public function index(): void
     {
@@ -11,13 +17,9 @@ class RegisterController
 
 		$username = $_SESSION['username'] ?? null;
 		$user_id = $_SESSION['user_id'] ?? null;
+        $email = $_SESSION['email'] ?? null;
 
-		$title = 'S\'inscrire';
-		$headerView	= isset($user_id) ? '/header-on.php' : '/header-off.php';
-		$mainView	= __DIR__ . $this->url;
-		$footerView	= '/footer.php';
-
-        require __DIR__ . '/../view/layout.php';
+        $this->renderRegister($errors, $username, $user_id, $email);
     }
 
     public function register(): void
@@ -27,23 +29,49 @@ class RegisterController
         $username = trim($_POST['username'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
+        $user_id = $_SESSION['user_id'] ?? null;
 
+        // Empty field [user, email, pwd]
+        
         if ($username === '') {
-            $errors[] = 'Le nom d’utilisateur est obligatoire.';
+            $errors[] = 'Le nom d\'utilisateur est obligatoire.';
+        }
+
+        if ($email === '') {
+            $errors[] = 'L\'adresse email est obligatoire.';
+        }
+
+        if ($password === '') {
+            $errors[] = 'Le mot de passe est obligatoire.';
+        }
+
+        // Invalid format [user, email, pwd]
+
+        if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $username)) {
+            $errors[] = 'Le nom d\'utilisateur est invalide.';
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors[] = 'L’adresse email est invalide.';
+            $errors[] = 'L\'adresse email est invalide.';
         }
 
-        if (strlen($password) < 8) {
-            $errors[] = 'Le mot de passe doit contenir au moins 8 caractères.';
+        if (strlen($password) < 12 || strlen($password) > 30 ||
+            !preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) ||
+            !preg_match('/[0-9]/', $password) || !preg_match('/[^a-zA-Z0-9]/', $password)) {
+            $errors[] = 'Le mot de passe est invalide.';
+        }
+
+        // Already used [user, email]
+
+        if (!empty($errors)) {
+            $this->renderRegister($errors, $username, $user_id, $email);
+            return;
         }
 
         $user = new User();
 
         if ($user->existsByUsername($username)) {
-            $errors[] = 'Ce nom d’utilisateur est déjà utilisé.';
+            $errors[] = 'Ce nom d\'utilisateur est déjà utilisé.';
         }
 
         if ($user->existsByEmail($email)) {
@@ -51,7 +79,7 @@ class RegisterController
         }
 
         if (!empty($errors)) {
-            require __DIR__ . $this->url;
+            $this->renderRegister($errors, $username, $user_id, $email);
             return;
         }
 

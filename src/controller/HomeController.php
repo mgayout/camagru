@@ -2,9 +2,6 @@
 
 class HomeController
 {
-
-	private string $url = '/../view/main/home.php';
-
     public function index(): void
     {
 
@@ -12,10 +9,9 @@ class HomeController
 		$user_id = $_SESSION['user_id'] ?? null;
 
 		$title = null;
-		$headerView	= isset($user_id) ? '/header-on.php' : '/header-off.php';
-		$mainView	= __DIR__ . $this->url;
-		$footerView	= '/footer.php';
+		$headerView	= isset($user_id) ? HEADERON_VIEW : HEADEROFF_VIEW;
+		$mainView	= HOME_VIEW;
 
-        require __DIR__ . '/../view/layout.php';
+        require LAYOUT_VIEW;
     }
 }
