@@ -9,7 +9,7 @@
 		</ul>
 	<?php endif; ?>
 
-	<form action="/register" method="POST">
+	<form action="/register" method="POST" autocomplete="off">
 		<div>
 			<label for="username">Nom d'utilisateur</label>
 			<input

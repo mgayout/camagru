@@ -9,7 +9,7 @@ class CamagruController
 		$user_id = $_SESSION['user_id'] ?? null;
 
 		$title = 'Page d\'accueil';
-		$$headerView	= isset($user_id) ? HEADERON_VIEW : HEADEROFF_VIEW;
+		$headerView	= isset($user_id) ? HEADERON_VIEW : HEADEROFF_VIEW;
 		$mainView	= CAMAGRU_VIEW;
 
         require LAYOUT_VIEW;

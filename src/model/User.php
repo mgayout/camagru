@@ -29,6 +29,20 @@ class User
         ]);
     }
 
+    public function delete(int $user_id): bool
+    {
+        $query = '
+            DELETE FROM users
+            WHERE id = :id
+        ';
+
+        $statement = $this->connection->prepare($query);
+
+        $statement->execute([':id' => $user_id,]);
+
+        return $statement->rowCount() > 0;
+    }
+
     public function existsByUsername(string $username): bool
     {
         $query = '

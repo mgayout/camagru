@@ -16,11 +16,11 @@ TODO :
     - [X] Adresse email valide
     - [X] Nom d'utilisateur unique
     - [X] Mot de passe complexe
-- [ ] Envoi d'un mail pour valider la création du compte
+- [O] Envoi d'un mail pour valider la création du compte
 - [X] Connexion à la plateforme
-- [ ] Mail de renouvellement de mdp
+- [O] Mail de renouvellement de mdp
 - [X] Déconnexion en 1 clic
-- [ ] Modification du mail, nom utilisateur ou mdp
+- [O] Modification du mail, nom utilisateur ou mdp
 
 - Galery features
 
@@ -31,7 +31,7 @@ TODO :
 - [ ] Affichage du contenu pour tous
 - [ ] Contenu trier par date
 - [ ] Notification par mail d'un like et commentaire
-    - [ ] Modifiable dans les parametre du compte
+    - [O] Modifiable dans les parametre du compte
 - [ ] Minimum 5 éléments par page
 
 - Editing features

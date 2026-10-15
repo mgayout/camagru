@@ -1,0 +1,282 @@
+* {
+    box-sizing: border-box;
+}
+
+.account-settings {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    color: #222;
+}
+
+.settings-header {
+    margin-bottom: 32px;
+}
+
+.settings-header h1 {
+    margin: 0 0 10px;
+    font-size: 30px;
+}
+
+.settings-header p,
+.section-description {
+    color: #777;
+    line-height: 1.6;
+}
+
+.settings-container {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+    width: 100%;
+    min-width: 0;
+}
+
+.settings-sidebar {
+    width: 260px;
+    min-width: 260px;
+    max-width: 260px;
+    position: sticky;
+    top: 24px;
+    align-self: start;
+}
+
+.settings-sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+
+.settings-sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 46px;
+    padding: 13px 12px;
+    color: #444;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.2s ease, color 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.settings-sidebar a:hover,
+.settings-sidebar a.active {
+    background: #f0f2ff;
+    color: #4149c8;
+}
+
+.settings-sidebar a.active {
+    font-weight: 600;
+}
+
+.settings-sidebar .danger-link {
+    color: #c62828;
+}
+
+.settings-content {
+    width: 100%;
+    min-width: 0;
+    height: 600px;
+    min-height: 600px;
+    max-height: 600px;
+    position: relative;
+    align-self: start;
+}
+
+.settings-card {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    padding: 28px;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    background: #fff;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+    box-sizing: border-box;
+}
+
+.settings-panel[hidden] {
+    display: none !important;
+}
+
+.settings-panel.active {
+    display: block;
+}
+
+.settings-card h2 {
+    margin: 0 0 8px;
+    font-size: 21px;
+}
+
+.settings-card form {
+    margin-top: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid #d8d8d8;
+    border-radius: 8px;
+    background: #fff;
+    color: #222;
+    font: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: 2px solid #777df0;
+    outline-offset: 1px;
+    border-color: #555bd8;
+}
+
+.btn-primary,
+.btn-danger {
+    display: inline-block;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-primary {
+    background: #4f46e5;
+}
+
+.btn-primary:hover {
+    background: #3f37c9;
+}
+
+.toggle-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.toggle-option span {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.toggle-option small {
+    color: #777;
+    line-height: 1.5;
+}
+
+.toggle-option input {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    accent-color: #4f46e5;
+}
+
+.danger-card {
+    border-color: #f0cccc;
+}
+
+.danger-card h2 {
+    color: #b42318;
+}
+
+.btn-danger {
+    background: #c62828;
+}
+
+.btn-danger:hover {
+    background: #a51f1f;
+}
+
+.settings-link {
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.settings-link.active {
+    background: #f0f2ff;
+    color: #4149c8;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .account-settings {
+        padding: 24px 16px;
+    }
+
+    .settings-header h1 {
+        font-size: 25px;
+    }
+
+    .settings-container {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .settings-sidebar {
+        position: static;
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+    }
+
+    .settings-sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .settings-sidebar a {
+        width: auto;
+        flex: 1 1 auto;
+    }
+
+    .settings-content {
+        height: 600px;
+        min-height: 600px;
+        max-height: 600px;
+    }
+
+    .settings-card {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 420px) {
+    .settings-content {
+        height: 560px;
+        min-height: 560px;
+        max-height: 560px;
+    }
+
+    .settings-card {
+        padding: 16px;
+    }
+}
