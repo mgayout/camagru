@@ -96,4 +96,71 @@ class User
 
 		return $user !== false ? $user : null;
 	}
+
+    // SETTERS
+
+    public function setCommentNotification(int $user_id, bool $val): bool
+    {
+        $query = '
+            UPDATE users
+            SET comment_notification = :val
+            WHERE id = :id';
+        
+        $statement = $this->connection->prepare($query);
+
+        return $statement->execute([
+            ':val' => $val ? 1 : 0,
+            ':id' => $user_id,]);
+    }
+
+    public function setLikeNotification(int $user_id, bool $val): bool
+    {
+        $query = '
+            UPDATE users
+            SET like_notification = :val
+            WHERE id = :id';
+        
+        $statement = $this->connection->prepare($query);
+
+        return $statement->execute([
+            ':val' => $val ? 1 : 0,
+            ':id' => $user_id,]);
+    }
+
+    // GETTERS
+
+    public function getCommentNotification(int $user_id): bool
+    {
+        $query = '
+            SELECT comment_notification
+            FROM users
+            WHERE id = :id
+            LIMIT 1';
+
+        $statement = $this->connection->prepare($query);
+
+        $statement->execute([':id' => $user_id,]);
+        
+        $result = $statement->fetchColumn();
+
+        return (bool) $result;
+    }
+
+    public function getLikeNotification(int $user_id): bool
+    {
+        $query = '
+            SELECT like_notification
+            FROM users
+            WHERE id = :id
+            LIMIT 1';
+
+        $statement = $this->connection->prepare($query);
+
+        $statement->execute([':id' => $user_id,]);
+        
+        $result = $statement->fetchColumn();
+
+        return (bool) $result;
+    }
+
 }

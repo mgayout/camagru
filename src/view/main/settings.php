@@ -118,28 +118,28 @@
                 <p class="section-description">
                     Choisissez les notifications que vous souhaitez recevoir.
                 </p>
-
-                <form action="update_notifications.php" method="POST">
-                    <label class="toggle-option">
-                        <span>
-                            <strong>Commentaire</strong>
-                            <small>Recevoir une notification à chaque commentaire sur vos photos.</small>
-                        </span>
-                        <input type="checkbox" name="email_notifications" value="1">
-                    </label>
-
-                    <label class="toggle-option">
-                        <span>
-                            <strong>Like</strong>
-                            <small>Recevoir une notification à chaque like sur vos photos.</small>
-                        </span>
-                        <input type="checkbox" name="news_notifications" value="1">
-                    </label>
-
-                    <button type="submit" class="btn-primary">
-                        Enregistrer les préférences
-                    </button>
-                </form>
+                <label class="toggle-option">
+                    <span>
+                        <strong>Commentaire</strong>
+                        <small>Recevoir une notification à chaque commentaire sur vos photos.</small>
+                    </span>
+                    <input
+                        type="checkbox"
+                        id="comment_notification"
+                        data-notification="comment"
+                        <?= !empty($commentNotification) ? 'checked' : '' ?>>
+                </label>
+                <label class="toggle-option">
+                    <span>
+                        <strong>Like</strong>
+                        <small>Recevoir une notification à chaque like sur vos photos.</small>
+                    </span>
+                    <input
+                        type="checkbox"
+                        id="like_notification"
+                        data-notification="like"
+                        <?= !empty($likeNotification) ? 'checked' : '' ?>>
+                </label>
             </section>
 
             <!-- PRÉFÉRENCES -->

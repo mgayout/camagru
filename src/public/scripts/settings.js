@@ -67,3 +67,38 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+document.querySelectorAll('[data-notification]').forEach(checkbox => {
+    checkbox.addEventListener('change', async function () {
+        const previousValue = !this.checked;
+
+        const data = new URLSearchParams({
+            type: this.dataset.notification,
+            value: this.checked ? '1' : '0'
+        });
+
+        this.disabled = true;
+
+        try {
+            const response = await fetch('/settings/updateNotification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: data
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error('Échec de la mise à jour');
+            }
+        } catch (error) {
+            // En cas d'erreur, on rétablit l'état précédent.
+            this.checked = previousValue;
+            alert('Impossible de modifier cette préférence.');
+        } finally {
+            this.disabled = false;
+        }
+    });
+});
