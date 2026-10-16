@@ -27,6 +27,9 @@ $router->auth('/camagru', [$camagruController, 'index']);
 $router->auth('/logout', [$logoutController, 'logout']);
 
 $router->auth('/settings', [$settingsController, 'index']);
+$router->post('/settings/updateUsername', [$settingsController, 'updateUsername']);
+$router->post('/settings/updateEmail', [$settingsController, 'updateEmail']);
+$router->post('/settings/updatePassword', [$settingsController, 'updatePassword']);
 $router->post('/settings/updateNotification', [$settingsController, 'updateNotification']);
 $router->post('/delete', [$settingsController, 'delete']);
 

@@ -33,33 +33,25 @@ class RegisterController
 
         // Empty field [user, email, pwd]
         
-        if ($username === '') {
+        if ($username === '')
             $errors[] = 'Le nom d\'utilisateur est obligatoire.';
-        }
 
-        if ($email === '') {
+        if ($email === '')
             $errors[] = 'L\'adresse email est obligatoire.';
-        }
 
-        if ($password === '') {
+        if ($password === '')
             $errors[] = 'Le mot de passe est obligatoire.';
-        }
 
         // Invalid format [user, email, pwd]
 
-        if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $username)) {
+        if ($this->usernameCheck($username))
             $errors[] = 'Le nom d\'utilisateur est invalide.';
-        }
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if ($this->emailCheck($email))
             $errors[] = 'L\'adresse email est invalide.';
-        }
 
-        if (strlen($password) < 12 || strlen($password) > 30 ||
-            !preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) ||
-            !preg_match('/[0-9]/', $password) || !preg_match('/[^a-zA-Z0-9]/', $password)) {
+        if ($this->passwordCheck($password))
             $errors[] = 'Le mot de passe est invalide.';
-        }
 
         // Already used [user, email]
 
@@ -70,13 +62,11 @@ class RegisterController
 
         $user = new User();
 
-        if ($user->existsByUsername($username)) {
+        if ($user->existsByUsername($username))
             $errors[] = 'Ce nom d\'utilisateur est déjà utilisé.';
-        }
 
-        if ($user->existsByEmail($email)) {
+        if ($user->existsByEmail($email))
             $errors[] = 'Cette adresse email est déjà utilisée.';
-        }
 
         if (!empty($errors)) {
             $this->renderRegister($errors, $username, $user_id, $email);
@@ -87,5 +77,31 @@ class RegisterController
 
         header('Location: /login');
         exit;
+    }
+
+    public function usernameCheck(string $username): bool
+    {
+        if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $username))
+            return true;
+        return false;
+    }
+
+    public function emailCheck(string $email): bool
+    {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+            return true;
+        return false;
+    }
+
+    public function passwordCheck(string $password): bool
+    {
+        if (strlen($password) < 12 ||
+            strlen($password) > 30 ||
+            !preg_match('/[A-Z]/', $password) ||
+            !preg_match('/[a-z]/', $password) ||
+            !preg_match('/[0-9]/', $password) ||
+            !preg_match('/[^a-zA-Z0-9]/', $password))
+            return true;
+        return false;
     }
 }

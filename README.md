@@ -20,7 +20,7 @@ TODO :
 - [X] Connexion à la plateforme
 - [O] Mail de renouvellement de mdp
 - [X] Déconnexion en 1 clic
-- [O] Modification du mail, nom utilisateur ou mdp
+- [X] Modification du mail, nom utilisateur ou mdp
 
 - Galery features
 
@@ -31,7 +31,7 @@ TODO :
 - [ ] Affichage du contenu pour tous
 - [ ] Contenu trier par date
 - [ ] Notification par mail d'un like et commentaire
-    - [O] Modifiable dans les parametre du compte
+    - [X] Modifiable dans les parametre du compte
 - [ ] Minimum 5 éléments par page
 
 - Editing features

@@ -99,6 +99,48 @@ class User
 
     // SETTERS
 
+    public function setUsername(int $user_id, string $username): bool
+    {
+        $query = '
+            UPDATE users
+            SET username = :username
+            WHERE id = :id';
+        
+        $statement = $this->connection->prepare($query);
+
+        return $statement->execute([
+            ':username' => $username,
+            ':id' => $user_id,]);
+    }
+
+    public function setEmail(int $user_id, string $email): bool
+    {
+        $query = '
+            UPDATE users
+            SET email = :email
+            WHERE id = :id';
+        
+        $statement = $this->connection->prepare($query);
+
+        return $statement->execute([
+            ':email' => $email,
+            ':id' => $user_id,]);
+    }
+
+    public function setPassword(int $user_id, string $password): bool
+    {
+        $query = '
+            UPDATE users
+            SET password = :password
+            WHERE id = :id';
+
+        $statement = $this->connection->prepare($query);
+
+        return $statement->execute([
+            ':password' => password_hash($password, PASSWORD_DEFAULT),
+            ':id' => $user_id,]);
+    }
+
     public function setCommentNotification(int $user_id, bool $val): bool
     {
         $query = '
@@ -128,6 +170,23 @@ class User
     }
 
     // GETTERS
+
+    public function getPasswordHash(int $user_id): ?string
+    {
+        $query = '
+            SELECT password
+            FROM users
+            WHERE id = :id
+            LIMIT 1';
+
+        $statement = $this->connection->prepare($query);
+
+        $statement->execute([':id' => $user_id]);
+
+        $hash = $statement->fetchColumn();
+
+        return $hash !== false ? $hash : null;
+    }
 
     public function getCommentNotification(int $user_id): bool
     {

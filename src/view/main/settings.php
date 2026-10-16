@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="/assets/settings.css">
-<script src="scripts/settings.js" defer></script>
+<script type="module" src="scripts/settings/sidebar_animation.js" defer></script>
+<script type="module" src="scripts/settings/events.js" defer></script>
 <main class="account-settings">
 
     <div class="settings-header">
@@ -24,10 +25,6 @@
                     🔔 Notifications
                 </a>
 
-                <a href="#preferences" class="settings-link" data-section="preferences">
-                    ⚙️ Préférences
-                </a>
-
                 <a href="#delete-account" class="settings-link danger-link" data-section="delete-account">
                     🗑️ Supprimer mon compte
                 </a>
@@ -43,38 +40,34 @@
                 <p class="section-description">
                     Modifiez les informations associées à votre compte.
                 </p>
-
-                <form action="update_account.php" method="POST">
-                    <div class="form-group">
-                        <label for="username">Nom d'utilisateur</label>
-                        <input type="text" id="username" name="username"
-                            value="<?= htmlspecialchars($user['username'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                            required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Adresse e-mail</label>
-                        <input type="email" id="email" name="email"
-                            value="<?= htmlspecialchars($user['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                            required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="firstname">Prénom</label>
-                        <input type="text" id="firstname" name="firstname"
-                            value="<?= htmlspecialchars($user['firstname'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lastname">Nom</label>
-                        <input type="text" id="lastname" name="lastname"
-                            value="<?= htmlspecialchars($user['lastname'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-                    </div>
-
-                    <button type="submit" class="btn-primary">
-                        Enregistrer les modifications
-                    </button>
-                </form>
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input 
+                        type="text"
+                        id="username"
+                        name="username"
+                        data-setting="username"
+                        value="<?= htmlspecialchars($user['username'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                        maxlength="50"
+                        required>
+                </div>
+                <button type="submit" class="btn-primary">
+                    Enregistrer la modification
+                </button>
+                <div class="form-group">
+                    <label for="email">Adresse e-mail</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        data-setting="email"
+                        value="<?= htmlspecialchars($user['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                        maxlength="50"
+                        required>
+                </div>
+                <button type="submit" class="btn-primary">
+                    Enregistrer la modification
+                </button>
             </section>
 
             <!-- SÉCURITÉ -->
@@ -83,33 +76,40 @@
                 <p class="section-description">
                     Gérez votre mot de passe et la sécurité de votre compte.
                 </p>
-
-                <form action="update_password.php" method="POST">
+                <div data-setting="password">
                     <div class="form-group">
                         <label for="current_password">Mot de passe actuel</label>
-                        <input type="password" id="current_password"
+                        <input
+                            type="password"
+                            id="current_password"
                             name="current_password"
-                            autocomplete="current-password" required>
+                            autocomplete="current-password"
+                            required>
                     </div>
-
                     <div class="form-group">
                         <label for="new_password">Nouveau mot de passe</label>
-                        <input type="password" id="new_password"
+                        <input
+                            type="password"
+                            id="new_password"
                             name="new_password"
-                            autocomplete="new-password" minlength="12" required>
+                            autocomplete="new-password"
+                            minlength="12"
+                            required>
                     </div>
-
                     <div class="form-group">
                         <label for="confirm_password">Confirmer le mot de passe</label>
-                        <input type="password" id="confirm_password"
+                        <input
+                            type="password"
+                            id="confirm_password"
                             name="confirm_password"
-                            autocomplete="new-password" minlength="12" required>
+                            autocomplete="new-password"
+                            minlength="12"
+                            required>
                     </div>
-
                     <button type="submit" class="btn-primary">
                         Modifier le mot de passe
                     </button>
-                </form>
+                </div>
             </section>
 
             <!-- NOTIFICATIONS -->
@@ -140,37 +140,6 @@
                         data-notification="like"
                         <?= !empty($likeNotification) ? 'checked' : '' ?>>
                 </label>
-            </section>
-
-            <!-- PRÉFÉRENCES -->
-            <section class="settings-card settings-panel" id="preferences" hidden>
-                <h2>Préférences</h2>
-                <p class="section-description">
-                    Personnalisez votre expérience.
-                </p>
-
-                <form action="update_preferences.php" method="POST">
-                    <div class="form-group">
-                        <label for="language">Langue</label>
-                        <select id="language" name="language">
-                            <option value="fr">Français</option>
-                            <option value="en">English</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="theme">Thème</label>
-                        <select id="theme" name="theme">
-                            <option value="light">Clair</option>
-                            <option value="dark">Sombre</option>
-                            <option value="system">Automatique</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn-primary">
-                        Enregistrer les préférences
-                    </button>
-                </form>
             </section>
 
             <!-- SUPPRESSION DU COMPTE -->
