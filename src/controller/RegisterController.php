@@ -73,6 +73,16 @@ class RegisterController
             return;
         }
 
+        $token = hash('sha256', bin2hex(random_bytes(32)));
+
+        $isSent = $this->sendAuthenticatedMail($username, $email, $token);
+
+        if (!$isSent) {
+            $errors[] = 'L\'envoi du mail d\'authentification a échoué';
+            $this->renderRegister($errors, $username, $user_id, $email);
+            return;
+        }
+
         $user->create($username, $email, $password);
 
         header('Location: /login');
@@ -103,5 +113,23 @@ class RegisterController
             !preg_match('/[^a-zA-Z0-9]/', $password))
             return true;
         return false;
+    }
+
+    public function sendAuthenticatedMail(string $username, string $email, string $token): bool
+    {
+        $subject = "Mail d'authentification";
+
+        $url = 'http://localhost:8080/verify-email?token=' . urlencode($token);
+        $message = "Bonjour {$username} !\n\n
+            Veuillez cliquer sur le lien ci-dessous pour valider la création de votre compte camagru :\n\n
+            {$url}";
+        
+        $headers = [
+            "From" => "noreply@camagru.test",
+            "Content-Type" => "text/plain; charset=UTF-8",];
+
+        $result = mail($email, $subject, $message, $headers);
+
+        return $result;
     }
 }

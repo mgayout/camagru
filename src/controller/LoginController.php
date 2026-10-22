@@ -53,6 +53,15 @@ class LoginController
             return;
         }
 
+        $user_id = (int) $user['id'];
+        $isAuthenticated = $userModel->getAuthenticated($user_id);
+
+        if (!$isAuthenticated) {
+            $errors[] = 'Profil non authentifié.';
+            $this->renderLogin($errors, $username, null, $email);
+            return;
+        }
+
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['email'] = $user['email'];

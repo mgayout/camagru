@@ -46,7 +46,15 @@ class Router
 
 		$route = $this->routes[$method][$path];
 
-		$isAuthenticated = isset($_SESSION['user_id']);
+		$isRegistered = isset($_SESSION['user_id']);
+
+		if ($isRegistered) {
+			$userModel = new User();
+			$isAuthenticated = $userModel->getAuthenticated($_SESSION['user_id']);
+		}
+		else if (!$isRegistered) {
+			$isAuthenticated = FALSE;
+		}
 
 		if ($route['auth'] === true && !$isAuthenticated) {
 			header('Location: /');

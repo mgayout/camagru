@@ -3,6 +3,7 @@ CREATE TABLE users (
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    authenticated BOOLEAN NOT NULL DEFAULT FALSE,
     comment_notification BOOLEAN NOT NULL DEFAULT TRUE,
     like_notification BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

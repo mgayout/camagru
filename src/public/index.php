@@ -16,11 +16,12 @@ $settingsController = new SettingsController();
 
 $router->guest('/', [$homeController, 'index']);
 
-$router->guest('/login', [$loginController, 'index']);
-$router->post('/login', [$loginController, 'login']);
-
 $router->guest('/register', [$registerController, 'index']);
 $router->post('/register', [$registerController, 'register']);
+$router->guest('/register', [$registerController, 'verify-email'])
+
+$router->guest('/login', [$loginController, 'index']);
+$router->post('/login', [$loginController, 'login']);
 
 $router->auth('/camagru', [$camagruController, 'index']);
 

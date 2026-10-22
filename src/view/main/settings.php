@@ -51,7 +51,7 @@
                         maxlength="50"
                         required>
                 </div>
-                <button type="submit" class="btn-primary">
+                <button type="submit" class="btn-primary username-submit">
                     Enregistrer la modification
                 </button>
                 <div class="form-group">

@@ -141,6 +141,20 @@ class User
             ':id' => $user_id,]);
     }
 
+    public function setAuthenticated(int $user_id, bool $val): bool
+    {
+        $query = '
+            UPDATE users
+            SET authenticated = :val
+            WHERE id = :id';
+        
+        $statement = $this->connection->prepare($query);
+
+        return $statement->execute([
+            ':val' => $val ? 1 : 0,
+            ':id' => $user_id,]);
+    }
+
     public function setCommentNotification(int $user_id, bool $val): bool
     {
         $query = '
@@ -186,6 +200,23 @@ class User
         $hash = $statement->fetchColumn();
 
         return $hash !== false ? $hash : null;
+    }
+
+    public function getAuthenticated(int $user_id): bool
+    {
+        $query = '
+            SELECT authenticated
+            FROM users
+            WHERE id = :id
+            LIMIT 1';
+        
+        $statement = $this->connection->prepare($query);
+
+        $statement->execute([':id' => $user_id,]);
+
+        $result = $statement->fetchColumn();
+
+        return (bool) $result;
     }
 
     public function getCommentNotification(int $user_id): bool
