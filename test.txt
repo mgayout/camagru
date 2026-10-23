@@ -1,2 +1,1 @@
-
-Warning: Cannot modify header information - headers already sent by (output started at /var/www/html/router/Router.php:1) in /var/www/html/controller/RegisterController.php on line 90
+ Fatal error: Uncaught TypeError: Router::guest(): Argument #2 () must be of type callable, array given, called in /var/www/html/public/index.php on line 29 and defined in /var/www/html/router/Router.php:31 Stack trace: #0 /var/www/html/public/index.php(29): Router->guest('/reset-password', Array) #1 {main} thrown in /var/www/html/router/Router.php on line 31

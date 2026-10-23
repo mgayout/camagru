@@ -156,6 +156,34 @@ class User
             ':id' => $user_id,]);
     }
 
+    public function setHashToken(int $user_id, string $hashToken): bool
+    {
+        $query = '
+            UPDATE users
+            SET token_hash = :hashToken
+            WHERE id = :id';
+
+        $statement = $this->connection->prepare($query);
+
+        return $statement->execute([
+            ':hashToken' => $hashToken,
+            ':id' => $user_id,]);
+    }
+
+    public function setExpiresAt(int $user_id, string $expiresAt): bool
+    {
+        $query = '
+            UPDATE users
+            SET expires_at = :expiresAt
+            WHERE id = :id';
+
+        $statement = $this->connection->prepare($query);
+
+        return $statement->execute([
+            ':expiresAt' => $expiresAt,
+            ':id' => $user_id,]);
+    }
+
     public function setAuthenticated(int $user_id, bool $val): bool
     {
         $query = '

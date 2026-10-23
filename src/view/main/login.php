@@ -29,8 +29,8 @@
 				name="password"
 				required
 			>
+			<a href="/forgot-password">Mot de passe oublié</a>
 		</div>
-
 		<button type="submit">Se connecter</button>
 	</form>
 </main>

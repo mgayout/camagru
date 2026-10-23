@@ -23,6 +23,12 @@ $router->get('/verify-email', [$registerController, 'verifyEmail']);
 $router->guest('/login', [$loginController, 'index']);
 $router->post('/login', [$loginController, 'login']);
 
+$router->guest('/forgot-password', [$loginController, 'forgotPassword']);
+$router->post('/forgot-password', [$loginController, 'sendResetLink']);
+
+$router->guest('/reset-password', [$loginController, 'resetPasswordForm']);
+$router->post('/reset-password', [$loginController, 'resetPassword']);
+
 $router->auth('/camagru', [$camagruController, 'index']);
 
 $router->auth('/logout', [$logoutController, 'logout']);
