@@ -10,15 +10,11 @@ class User
         $this->connection = $database->getConnection();
     }
 
-    public function create(
-        string $username,
-        string $email,
-        string $password
-    ): bool {
+    public function create( string $username, string $email, string $password, string $token_hash, string $expires_at): bool
+    {
         $query = '
-            INSERT INTO users (username, email, password)
-            VALUES (:username, :email, :password)
-        ';
+            INSERT INTO users (username, email, password, token_hash, expires_at)
+            VALUES (:username, :email, :password, :token_hash, :expires_at)';
 
         $statement = $this->connection->prepare($query);
 
@@ -26,7 +22,8 @@ class User
             ':username' => $username,
             ':email' => $email,
             ':password' => password_hash($password, PASSWORD_DEFAULT),
-        ]);
+            ':token_hash' => $token_hash,
+            ':expires_at' => $expires_at,]);
     }
 
     public function delete(int $user_id): bool
@@ -96,6 +93,24 @@ class User
 
 		return $user !== false ? $user : null;
 	}
+
+    public function verifyEmailByTokenHash(string $hashToken): bool
+    {
+        $query = '
+            UPDATE users
+            SET authenticated = TRUE,
+                token_hash = NULL,
+                expires_at = NULL
+            WHERE token_hash = :token_hash
+                AND expires_at > UTC_TIMESTAMP()
+                AND authenticated = FALSE';
+        
+        $statement = $this->connection->prepare($query);
+        
+        $statement->execute([':token_hash' => $hashToken]);
+
+        return $statement->rowCount() === 1;
+    }
 
     // SETTERS
 

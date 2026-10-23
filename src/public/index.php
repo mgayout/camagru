@@ -18,7 +18,7 @@ $router->guest('/', [$homeController, 'index']);
 
 $router->guest('/register', [$registerController, 'index']);
 $router->post('/register', [$registerController, 'register']);
-$router->guest('/register', [$registerController, 'verify-email'])
+$router->get('/verify-email', [$registerController, 'verifyEmail']);
 
 $router->guest('/login', [$loginController, 'index']);
 $router->post('/login', [$loginController, 'login']);

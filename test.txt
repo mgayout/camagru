@@ -1,1 +1,2 @@
- Fatal error: Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'authenticated' in 'SELECT' in /var/www/html/model/User.php:215 Stack trace: #0 /var/www/html/model/User.php(215): PDOStatement->execute(Array) #1 /var/www/html/controller/LoginController.php(57): User->getAuthenticated(1) #2 /var/www/html/router/Router.php(69): LoginController->login() #3 /var/www/html/public/index.php(36): Router->dispatch('POST', '/login') #4 {main} thrown in /var/www/html/model/User.php on line 215
+
+Warning: Cannot modify header information - headers already sent by (output started at /var/www/html/router/Router.php:1) in /var/www/html/controller/RegisterController.php on line 90

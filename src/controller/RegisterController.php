@@ -60,12 +60,12 @@ class RegisterController
             return;
         }
 
-        $user = new User();
+        $userModel = new User();
 
-        if ($user->existsByUsername($username))
+        if ($userModel->existsByUsername($username))
             $errors[] = 'Ce nom d\'utilisateur est déjà utilisé.';
 
-        if ($user->existsByEmail($email))
+        if ($userModel->existsByEmail($email))
             $errors[] = 'Cette adresse email est déjà utilisée.';
 
         if (!empty($errors)) {
@@ -73,7 +73,11 @@ class RegisterController
             return;
         }
 
-        $token = hash('sha256', bin2hex(random_bytes(32)));
+        $token = bin2hex(random_bytes(32));
+        $hashToken = hash('sha256', $token);
+        $expiresAt = (new DateTimeImmutable('+30 minutes', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+
+        $userModel->create($username, $email, $password, $hashToken, $expiresAt);
 
         $isSent = $this->sendAuthenticatedMail($username, $email, $token);
 
@@ -82,8 +86,6 @@ class RegisterController
             $this->renderRegister($errors, $username, $user_id, $email);
             return;
         }
-
-        $user->create($username, $email, $password);
 
         header('Location: /login');
         exit;
@@ -131,5 +133,29 @@ class RegisterController
         $result = mail($email, $subject, $message, $headers);
 
         return $result;
+    }
+
+    public function verifyEmail(): void
+    {
+        $token = $_GET['token'] ?? '';
+
+        if (!is_string($token) || !preg_match('/\A[a-f0-9]{64}\z/', $token)) {
+            http_response_code(400);
+            echo 'Lien de vérification invalide.';
+            return;
+        }
+
+        $hashToken = hash('sha256', $token);
+
+        $userModel = new User();
+
+        if (!$userModel->verifyEmailByTokenHash($hashToken)) {
+            http_response_code(400);
+            echo 'Lien invalide, expiré ou déjà utilisé.';
+            return;
+        }
+
+        header('Location: /login?verification=success');
+        exit;
     }
 }

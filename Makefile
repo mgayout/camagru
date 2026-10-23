@@ -20,11 +20,11 @@ re:
 	docker compose up -d
 	@echo "http://localhost:8080"
 
-resetdb:
+reset:
 	@echo "Suppression de la database."
 	docker compose down
 	docker compose down -v
 	docker compose up -d
 	@echo "La base de données a été réinitialisée."
 
-.PHONY: all build down re resetdb
+.PHONY: all build down re reset
