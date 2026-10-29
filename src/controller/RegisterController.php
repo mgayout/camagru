@@ -146,14 +146,27 @@ class RegisterController
         }
 
         $hashToken = hash('sha256', $token);
-
         $userModel = new User();
+        $user = $userModel->findByToken($hashToken);
 
-        if (!$userModel->verifyEmailByTokenHash($hashToken)) {
+        if (!$user) {
             http_response_code(400);
             echo 'Lien invalide, expiré ou déjà utilisé.';
             return;
         }
+
+        $user_id = $user['id'];
+
+        if ($userModel->isTokenExpired($user_id)) {
+            $userModel->delete($user_id);
+            http_response_code(400);
+            echo 'Lien invalide, expiré ou déjà utilisé.';
+            return;
+        }
+
+        $userModel->setHashToken($user_id, null);
+        $userModel->setExpiresAt($user_id, null);
+        $userModel->setAuthenticated($user_id, true);
 
         header('Location: /login?verification=success');
         exit;

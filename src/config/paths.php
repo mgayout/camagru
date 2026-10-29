@@ -13,7 +13,7 @@ define('REGISTER_VIEW', VIEW_PATH . '/main/register.php');
 
 define('LOGIN_VIEW', VIEW_PATH . '/main/login.php');
 define('FORGET_PASSWORD_VIEW', VIEW_PATH . '/main/forget-password.php');
-define('RESET_PASSWORD_VIEW', VIEW_PATH . '/main/reset-password');
+define('RESET_PASSWORD_VIEW', VIEW_PATH . '/main/reset-password.php');
 
 define('CAMAGRU_VIEW', VIEW_PATH . '/main/camagru.php');
 

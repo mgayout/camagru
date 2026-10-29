@@ -80,36 +80,56 @@ class User
 			SELECT id, username, email, password
 			FROM users
 			WHERE email = :email
-			LIMIT 1
-		';
+			LIMIT 1';
 
 		$statement = $this->connection->prepare($query);
 
-		$statement->execute([
-			':email' => $email,
-		]);
+		$statement->execute([':email' => $email,]);
 
 		$user = $statement->fetch(PDO::FETCH_ASSOC);
 
 		return $user !== false ? $user : null;
 	}
 
-    public function verifyEmailByTokenHash(string $hashToken): bool
+    public function findByToken(string $hashToken): ?array
     {
         $query = '
-            UPDATE users
-            SET authenticated = TRUE,
-                token_hash = NULL,
-                expires_at = NULL
+            SELECT id, username, email, password
+            FROM users
             WHERE token_hash = :token_hash
-                AND expires_at > UTC_TIMESTAMP()
-                AND authenticated = FALSE';
+            LIMIT 1';
         
         $statement = $this->connection->prepare($query);
         
-        $statement->execute([':token_hash' => $hashToken]);
+        $statement->execute([':token_hash' => $hashToken,]);
 
-        return $statement->rowCount() === 1;
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $user !== false ? $user : null;
+    }
+
+    public function isTokenExpired(int $user_id): bool
+    {
+        $query = '
+            SELECT expires_at
+            FROM users
+            WHERE id = :id
+            LIMIT 1';
+
+        $statement = $this->connection->prepare($query);
+        
+        $statement->execute([':id' => $user_id]);
+
+        $expiresAt = $statement->fetchColumn();
+
+        if ($expiresAt === false || $expiresAt === null) {
+            return true;
+        }
+
+        $expiration = new DateTimeImmutable($expiresAt, new DateTimeZone('UTC'));
+        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+
+        return $expiration <= $now;
     }
 
     // SETTERS
@@ -156,7 +176,7 @@ class User
             ':id' => $user_id,]);
     }
 
-    public function setHashToken(int $user_id, string $hashToken): bool
+    public function setHashToken(int $user_id, ?string $hashToken): bool
     {
         $query = '
             UPDATE users
@@ -170,7 +190,7 @@ class User
             ':id' => $user_id,]);
     }
 
-    public function setExpiresAt(int $user_id, string $expiresAt): bool
+    public function setExpiresAt(int $user_id, ?string $expiresAt): bool
     {
         $query = '
             UPDATE users

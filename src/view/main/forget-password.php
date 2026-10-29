@@ -13,15 +13,8 @@
         <form action="/forgot-password" method="POST">
             <div>
                 <label for="email">Adresse email</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    autocomplete="email"
-                >
+                <input type="email" id="email" name="email" required autocomplete="email">
             </div>
-
             <button type="submit">
                 Recevoir un lien de réinitialisation
             </button>

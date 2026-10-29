@@ -55,9 +55,5 @@
                 Réinitialiser mon mot de passe
             </button>
         </form>
-
-        <p>
-            <a href="/login">Retour à la connexion</a>
-        </p>
     <?php endif; ?>
 </main>

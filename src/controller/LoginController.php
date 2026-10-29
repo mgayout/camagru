@@ -20,7 +20,7 @@ class LoginController
         require LAYOUT_VIEW;
     }
 
-    private function renderResetPassword(array $errors, bool $success, ?string $username = null, ?int $user_id = null, ?string $email = null): void
+    private function renderResetPasswordForm(array $errors, bool $success, ?string $username = null, ?int $user_id = null, ?string $email = null, string $token = ''): void
     {
         $title = 'Changement du mot de passe';
         $headerView = isset($user_id) ? HEADERON_VIEW : HEADEROFF_VIEW;
@@ -53,7 +53,7 @@ class LoginController
             $errors[] = 'L\'adresse email est invalide.';
         }
 
-        if ($password === '') {
+        if (!is_string($password) || $password === '') {
             $errors[] = 'Le mot de passe est obligatoire.';
         }
 
@@ -93,7 +93,7 @@ class LoginController
         $errors = [];
         $success = false;
         $username = $_SESSION['username'] ?? null;
-		$user_id = $_SESSION['user_id'] ?? null;
+		$user_id = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null;
         $email = $_SESSION['email'] ?? null;
 
         $this->renderForgetPassword($errors, $success, $username, $user_id, $email);
@@ -103,23 +103,24 @@ class LoginController
     {
         $errors = [];
         $success = false;
-        $username = $_SESSION['username'] ?? null;
-		$user_id = $_SESSION['user_id'] ?? null;
+        $username = null;
+		$user_id = null;
         $email = trim($_POST['email'] ?? '');
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors = ['Veuillez saisir une adresse email valide.'];
-            $success = false;
             $this->renderForgetPassword($errors, $success, $username, $user_id, $email);
             return;
         }
 
         $userModel = new User();
-        $user = $userModel->findByMail($email);
+        $user = $userModel->findByEmail($email);
 
         $success = true;
         
         if ($user !== null) {
+            $username = (string) $user['username'];
+            $user_id = (int) $user['id'];
             $token = bin2hex(random_bytes(32));
             $tokenHash = hash('sha256', $token);
             $expiresAt = (new DateTimeImmutable('+30 minutes', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
@@ -136,61 +137,87 @@ class LoginController
     public function resetPasswordForm(): void
     {
         $errors = [];
-        $success = [];
+        $success = false;
+        $username = null;
+		$user_id = null;
+        $email = null;
 
         $token = $_GET['token'] ?? '';
 
-        if ( !is_string($token) || !preg_match('/\A[a-f0-9]{64}\z/', $token)) {
+        if (!is_string($token) || !preg_match('/\A[a-f0-9]{64}\z/', $token)) {
+            http_response_code(400);
             $errors[] = 'Le lien de réinitialisation est invalide ou incomplet.';
-            $token = '';
+            $this->renderResetPasswordForm($errors, $success, $username, $user_id, $email, '');
+            return;
         }
 
-        $this->renderResetPassword($errors, $success, $username, $user_id, $email);
+        $userModel = new User();
+        $hashToken = hash('sha256', $token);
+
+        $user = $userModel->findByToken($hashToken);
+
+        if ($user === null) {
+            http_response_code(400);
+            echo 'Lien invalide, expiré ou déjà utilisé.';
+            header('Location: /login');
+            return;
+        }
+
+        $user_id = $user['id'];
+
+        if ($userModel->isTokenExpired($user_id)) {
+            http_response_code(400);
+            echo 'Lien invalide, expiré ou déjà utilisé.';
+            header('Location: /login');
+            return;
+        }
+
+        $this->renderResetPasswordForm($errors, $success, $username, $user_id, $email, $token);
     }
 
-    public function resetPassword(string $username, string $lastPassword, string $newPassword, string $confirmPassword): void
+    public function resetPassword(): void
     {
-        header('Content-Type: application/json; charset=utf-8');
+        $errors = [];
+        $success = false;
+        $token = $_POST['token'] ?? '';
+        $new_password = $_POST['password'] ?? '';
+        $confirm_password = $_POST['password_confirmation'] ?? '';
 
-        if (!isset($_SESSION['user_id'])) {
-            http_response_code(401);
-            echo json_encode(['success' => false]);
-            return;
-        }
+        $username = null;
+        $user_id = null;
+        $email = null;
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode(['success' => false]);
-            return;
-        }
-
-        $current_password = $data['current_password'] ?? '';
-        $new_password = $data['new_password'] ?? '';
-        $confirm_password = $data['confirm_password'] ?? '';
-
-        $user_id = (int) $_SESSION['user_id'];
         $registerModel = new RegisterController();
-        $userModel = new User();
-        $passwordHash = $userModel->getPasswordHash($user_id);
 
-        if (!password_verify($current_password, $passwordHash) ||
-            $registerModel->passwordCheck($new_password) ||
+        if ($registerModel->passwordCheck($new_password) ||
             $registerModel->passwordCheck($confirm_password) ||
             $new_password !== $confirm_password) {
-                http_response_code(400);
-                echo json_encode(['success' => false]);
-                return;
-        }
-
-        $success = $userModel->setPassword($user_id, $new_password);
-
-        if (!$success) {
-            http_response_code(500);
-            echo json_encode(['success' => false]);
+            http_response_code(400);
+            $this->renderResetPasswordForm($errors, $success, $username, $user_id, $email, $token);
             return;
         }
 
-        echo json_encode(['success' => true]);
+        $hashToken = hash('sha256', $token);
+        $userModel = new User();
+        $user = $userModel->findByToken($hashToken);
+
+        if ($user === null) {
+            http_response_code(400);
+            $errors[] = 'Lien invalide, expiré ou déjà utilisé.';
+            $this->renderResetPasswordForm($errors, $success, $username, $user_id, $email, $token);
+            return;
+        }
+
+        $user_id = $user['id'];
+        $success = $userModel->setPassword($user_id, $new_password);
+
+        if ($success) {
+            $userModel->setHashToken($user_id, null);
+            $userModel->setExpiresAt($user_id, null);
+        }
+
+        header('Location: /login');
+        exit();
     }
 
     public function sendResetLinkMail(string $username, string $email, string $token): bool
