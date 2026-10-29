@@ -14,4 +14,6 @@ class CamagruController
 
         require LAYOUT_VIEW;
     }
+
+	
 }

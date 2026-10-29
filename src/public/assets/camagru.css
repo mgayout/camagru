@@ -1,0 +1,115 @@
+
+.webcam-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 24px;
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+#webcam {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #161616;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+#webcam[hidden] {
+    display: none;
+}
+
+.webcam-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.webcam-actions button,
+#retakePhoto {
+    flex: 1;
+    min-width: 130px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s, opacity 0.2s;
+}
+
+#startCamera {
+    background: #2563eb;
+    color: white;
+}
+
+#startCamera.camera-on {
+    background: #dc2626;
+    color: white;
+}
+
+#takePhoto {
+    background: #16a34a;
+    color: white;
+}
+
+#importPhoto {
+    background: #7c3aed;
+    color: white;
+}
+
+.webcam-actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#cameraStatus {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #4b5563;
+}
+
+#photoView {
+    width: 100%;
+}
+
+#photoView[hidden] {
+    display: none;
+}
+
+#photo {
+    display: block;
+    width: 100%;
+    max-height: 80vh;
+    margin-top: 0;
+    border-radius: 12px;
+    object-fit: contain;
+    background: #161616;
+}
+
+#retakePhoto {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    background: #2563eb;
+    color: white;
+}
+
+#retakePhoto:hover {
+    background: #1d4ed8;
+}
+
+@media (max-width: 480px) {
+    .webcam-container {
+        margin: 16px auto;
+        padding: 16px;
+    }
+
+    #photo {
+        max-height: 75vh;
+    }
+}
