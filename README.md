@@ -16,9 +16,9 @@ TODO :
     - [X] Adresse email valide
     - [X] Nom d'utilisateur unique
     - [X] Mot de passe complexe
-- [O] Envoi d'un mail pour valider la création du compte
+- [X] Envoi d'un mail pour valider la création du compte
 - [X] Connexion à la plateforme
-- [O] Mail de renouvellement de mdp
+- [X] Mail de renouvellement de mdp
 - [X] Déconnexion en 1 clic
 - [X] Modification du mail, nom utilisateur ou mdp
 

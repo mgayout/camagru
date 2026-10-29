@@ -115,12 +115,18 @@ class LoginController
 
         $userModel = new User();
         $user = $userModel->findByEmail($email);
-
-        $success = true;
         
         if ($user !== null) {
             $username = (string) $user['username'];
             $user_id = (int) $user['id'];
+
+            if ($userModel->getAuthenticated($user_id)) {
+                $errors[] = 'Veuillez valider la création de votre compte avant de modifier votre mot de passe.';
+                $this->renderForgetPassword($errors, $success, $username, $user_id, $email);
+                return;
+            }
+
+            $success = true;
             $token = bin2hex(random_bytes(32));
             $tokenHash = hash('sha256', $token);
             $expiresAt = (new DateTimeImmutable('+30 minutes', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
