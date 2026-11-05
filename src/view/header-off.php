@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/assets/header.css">
 <header>
     <h1>Camagru</h1>
 	<nav>

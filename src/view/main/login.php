@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/assets/main.css">
 <main>
 	<h1>Connexion</h1>
 

@@ -6,12 +6,11 @@ const photoInput = document.getElementById("photoInput");
 
 const startButton = document.getElementById("startCamera");
 const takeButton = document.getElementById("takePhoto");
-const importButton = document.getElementById("importPhoto");
-const status = document.getElementById("cameraStatus");
+const importButton = document.getElementById("importImage");
 
-const cameraActions = document.getElementById("cameraActions");
+const cameraContainer = document.getElementById("cameraContainer");
 const photoView = document.getElementById("photoView");
-const retakeButton = document.getElementById("retakePhoto");
+const retakeButton = document.getElementById("back");
 
 let stream = null;
 let photoUrl = null;
@@ -26,16 +25,13 @@ function displayPhoto(blob) {
     photoUrl = URL.createObjectURL(blob);
     photo.src = photoUrl;
 
-    // Arrêter la webcam
     stopCamera();
 
-    // Masquer l'interface de capture
-    video.hidden = true;
-    cameraActions.hidden = true;
-    status.hidden = true;
+    cameraContainer.hidden = true;
+    takeButton.hidden = true;
 
-    // Afficher la photo en grand
     photoView.hidden = false;
+    retakeButton.hidden = false;
 }
 
 // Arrête la webcam et réinitialise son bouton
@@ -57,23 +53,18 @@ function stopCamera() {
 startButton.addEventListener("click", async () => {
     if (stream) {
         stopCamera();
-        status.textContent = "Webcam désactivée.";
         return;
     }
 
     if (cameraStarting) return;
 
     if (!navigator.mediaDevices?.getUserMedia) {
-        status.hidden = false;
-        status.textContent =
-            "Webcam indisponible. Utilise HTTPS ou localhost.";
+        alert("Webcam indisponible. Utilise HTTPS ou localhost.");
         return;
     }
 
     cameraStarting = true;
     startButton.disabled = true;
-    status.hidden = false;
-    status.textContent = "Activation de la webcam...";
 
     try {
         const newStream = await navigator.mediaDevices.getUserMedia({
@@ -94,7 +85,6 @@ startButton.addEventListener("click", async () => {
         startButton.textContent = "Éteindre la webcam";
         startButton.classList.add("camera-on");
 
-        status.textContent = "Webcam activée.";
     } catch (error) {
         const messages = {
             NotAllowedError:
@@ -105,9 +95,11 @@ startButton.addEventListener("click", async () => {
                 "La webcam est occupée ou inaccessible."
         };
 
-        status.textContent =
+        alert(
             messages[error.name] ||
-            "Impossible d'activer la webcam : " + error.message;
+            "Impossible d'activer la webcam : " + error.message
+        );
+
     } finally {
         cameraStarting = false;
         startButton.disabled = false;
@@ -117,8 +109,7 @@ startButton.addEventListener("click", async () => {
 // Capture une photo depuis la webcam
 takeButton.addEventListener("click", () => {
     if (!stream || video.videoWidth === 0) {
-        status.hidden = false;
-        status.textContent = "La webcam n'est pas prête.";
+        alert("La webcam n'est pas prête.");
         return;
     }
 
@@ -137,8 +128,7 @@ takeButton.addEventListener("click", () => {
 
     canvas.toBlob(blob => {
         if (!blob) {
-            status.hidden = false;
-            status.textContent = "Impossible de créer la photo.";
+            alert("Impossible de créer la photo.");
             return;
         }
 
@@ -158,17 +148,14 @@ photoInput.addEventListener("change", () => {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-        status.hidden = false;
-        status.textContent = "Veuillez sélectionner une image.";
+        alert("Veuillez sélectionner une image.");
         photoInput.value = "";
         return;
     }
 
     // Limite la taille du fichier à 15 Mo
     if (file.size > 15 * 1024 * 1024) {
-        status.hidden = false;
-        status.textContent =
-            "L'image ne doit pas dépasser 15 Mo.";
+        alert("L'image ne doit pas dépasser 15 Mo.");
         photoInput.value = "";
         return;
     }
@@ -184,8 +171,7 @@ photoInput.addEventListener("change", () => {
 
     image.onerror = () => {
         URL.revokeObjectURL(temporaryUrl);
-        status.hidden = false;
-        status.textContent = "Impossible de lire cette image.";
+        alert("Impossible de lire cette image.");
         photoInput.value = "";
     };
 
@@ -195,10 +181,9 @@ photoInput.addEventListener("change", () => {
 // Revenir à l'interface webcam
 retakeButton.addEventListener("click", () => {
     photoView.hidden = true;
-
-    video.hidden = false;
-    cameraActions.hidden = false;
-    status.hidden = false;
+    cameraContainer.hidden = false;
+    takeButton.hidden = false;
+    retakeButton.hidden = true;
 
     photo.removeAttribute("src");
 
@@ -208,7 +193,6 @@ retakeButton.addEventListener("click", () => {
     }
 
     photoInput.value = "";
-    status.textContent = "Tu peux reprendre une photo ou en importer une.";
 });
 
 // Libérer les ressources quand l'utilisateur quitte la page

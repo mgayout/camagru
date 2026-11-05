@@ -1,19 +1,23 @@
+<link rel="stylesheet" href="/assets/main.css">
 <link rel="stylesheet" href="/assets/camagru.css">
 <script type="module" src="/scripts/camagru/webcam.js" defer></script>
 <main>
-    <div class="webcam-container" id="webcamContainer">
-        <video id="webcam" autoplay playsinline muted></video>
-        <input type="file" id="photoInput" accept="image/*" hidden>
-        <div class="webcam-actions" id="cameraActions">
-            <button id="startCamera" type="button">Activer la webcam</button>
-            <button id="takePhoto" type="button" disabled>Prendre une photo</button>
-            <button id="importPhoto" type="button">Importer une photo</button>
+    <div class="sidebar">
+        <button id="back" type="button" hidden>Retour</button>
+        <button id="startCamera" type="button">Activer la webcam</button>
+        <button id="importImage" type="button">Importer une image</button>
+        <input type="file" id="photoInput" accept="image/*" hidden/>
+    </div>
+    <div class="content">
+        <div class="visual-container" id="cameraContainer">
+            <video id="webcam" autoplay playsinline></video>
+            <canvas id="canvas" hidden></canvas>
         </div>
-        <p id="cameraStatus" role="status" aria-live="polite" hidden></p>
-        <canvas id="canvas" hidden></canvas>
+        <button id="takePhoto" type="button"></button>
         <div id="photoView" hidden>
-            <img id="photo" alt="Aperçu de la photo sélectionnée">
-            <button id="retakePhoto" type="button">Reprendre</button>
+            <div class="visual-container">
+                <img id="photo" alt="Photo sélectionnée">
+            </div>
         </div>
     </div>
 </main>

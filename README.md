@@ -40,8 +40,8 @@ TODO :
     - [X] Rejet des profils non connectés
 
 - Main :
-- [ ] Bouton Webcam
-- [ ] Bouton Image PC
+- [X] Bouton Webcam
+- [X] Bouton Image PC
 - [ ] Liste des éléments supperposables
 
 - Side : 

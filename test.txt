@@ -1,1 +1,10 @@
- Fatal error: Uncaught TypeError: Router::guest(): Argument #2 () must be of type callable, array given, called in /var/www/html/public/index.php on line 29 and defined in /var/www/html/router/Router.php:31 Stack trace: #0 /var/www/html/public/index.php(29): Router->guest('/reset-password', Array) #1 {main} thrown in /var/www/html/router/Router.php on line 31
+mgayout@UbuntuVM:~/Desktop/42/camagru$ lsub
+Command 'lsub' not found, did you mean:
+  command 'lsusb' from deb usbutils (1:019-1)
+  command 'qsub' from deb gridengine-client (8.1.9+dfsg-13.2)
+  command 'qsub' from deb slurm-wlm-torque (25.11.2-1ubuntu2)
+Try: sudo apt install <deb name>
+mgayout@UbuntuVM:~/Desktop/42/camagru$ ls -l /dev/video*
+ls: cannot access '/dev/video*': No such file or directory
+mgayout@UbuntuVM:~/Desktop/42/camagru$ 
+
