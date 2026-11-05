@@ -7,6 +7,7 @@ const photoInput = document.getElementById("photoInput");
 const startButton = document.getElementById("startCamera");
 const takeButton = document.getElementById("takePhoto");
 const importButton = document.getElementById("importImage");
+const addElements = document.getElementById("addElements");
 
 const cameraContainer = document.getElementById("cameraContainer");
 const photoView = document.getElementById("photoView");
@@ -16,7 +17,6 @@ let stream = null;
 let photoUrl = null;
 let cameraStarting = false;
 
-// Affiche une photo capturée ou importée
 function displayPhoto(blob) {
     if (photoUrl) {
         URL.revokeObjectURL(photoUrl);
@@ -29,12 +29,14 @@ function displayPhoto(blob) {
 
     cameraContainer.hidden = true;
     takeButton.hidden = true;
+    startButton.hidden = true;
+    importButton.hidden = true;
 
     photoView.hidden = false;
     retakeButton.hidden = false;
+    addElements.hidden = false;
 }
 
-// Arrête la webcam et réinitialise son bouton
 function stopCamera() {
     if (stream) {
         stream.getTracks().forEach(track => track.stop());
@@ -49,7 +51,6 @@ function stopCamera() {
     startButton.classList.remove("camera-on");
 }
 
-// Active ou désactive la webcam
 startButton.addEventListener("click", async () => {
     if (stream) {
         stopCamera();
@@ -106,7 +107,6 @@ startButton.addEventListener("click", async () => {
     }
 });
 
-// Capture une photo depuis la webcam
 takeButton.addEventListener("click", () => {
     if (!stream || video.videoWidth === 0) {
         alert("La webcam n'est pas prête.");
@@ -136,12 +136,10 @@ takeButton.addEventListener("click", () => {
     }, "image/jpeg", 0.92);
 });
 
-// Ouvre l'explorateur de fichiers
 importButton.addEventListener("click", () => {
     photoInput.click();
 });
 
-// Importe et affiche une image
 photoInput.addEventListener("change", () => {
     const file = photoInput.files[0];
 
@@ -153,7 +151,6 @@ photoInput.addEventListener("change", () => {
         return;
     }
 
-    // Limite la taille du fichier à 15 Mo
     if (file.size > 15 * 1024 * 1024) {
         alert("L'image ne doit pas dépasser 15 Mo.");
         photoInput.value = "";
@@ -178,12 +175,16 @@ photoInput.addEventListener("change", () => {
     image.src = temporaryUrl;
 });
 
-// Revenir à l'interface webcam
 retakeButton.addEventListener("click", () => {
-    photoView.hidden = true;
+
     cameraContainer.hidden = false;
     takeButton.hidden = false;
+    startButton.hidden = false;
+    importButton.hidden = false;
+
+    photoView.hidden = true;
     retakeButton.hidden = true;
+    addElements.hidden = true;
 
     photo.removeAttribute("src");
 

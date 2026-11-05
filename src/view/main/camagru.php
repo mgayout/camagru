@@ -4,6 +4,7 @@
 <main>
     <div class="sidebar">
         <button id="back" type="button" hidden>Retour</button>
+        <button id="addElements" type="button" hidden>Ajouter des éléments</button>
         <button id="startCamera" type="button">Activer la webcam</button>
         <button id="importImage" type="button">Importer une image</button>
         <input type="file" id="photoInput" accept="image/*" hidden/>
