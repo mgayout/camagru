@@ -20,5 +20,6 @@
                 <img id="photo" alt="Photo sélectionnée">
             </div>
         </div>
+        <button id="publishPhoto" type="button" hidden>Publier</button>
     </div>
 </main>
