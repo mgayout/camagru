@@ -1,3 +1,4 @@
+
 const video = document.getElementById("webcam");
 const canvas = document.getElementById("canvas");
 const photo = document.getElementById("photo");
@@ -6,7 +7,6 @@ const photoInput = document.getElementById("photoInput");
 const startButton = document.getElementById("startCamera");
 const takeButton = document.getElementById("takePhoto");
 const importButton = document.getElementById("importImage");
-const addElements = document.getElementById("addElements");
 const publishButton = document.getElementById("publishPhoto");
 
 const cameraContainer = document.getElementById("cameraContainer");
@@ -17,12 +17,9 @@ let stream = null;
 let photoUrl = null;
 let cameraStarting = false;
 
-// Masquer le bouton photo au chargement
 takeButton.hidden = true;
 takeButton.disabled = true;
 
-
-// Afficher une photo
 function displayPhoto(blob) {
     if (photoUrl) {
         URL.revokeObjectURL(photoUrl);
@@ -40,12 +37,15 @@ function displayPhoto(blob) {
 
     photoView.hidden = false;
     retakeButton.hidden = false;
-    addElements.hidden = false;
     publishButton.hidden = false;
+
+    photo.onload = () => {
+        document.dispatchEvent(
+            new Event("camagru:photo-ready")
+        );
+    };
 }
 
-
-// Arrêter la webcam
 function stopCamera() {
     if (stream) {
         stream.getTracks().forEach(track => track.stop());
@@ -62,8 +62,6 @@ function stopCamera() {
     startButton.classList.remove("camera-on");
 }
 
-
-// Activer / désactiver la webcam
 startButton.addEventListener("click", async () => {
     if (stream) {
         stopCamera();
@@ -95,7 +93,6 @@ startButton.addEventListener("click", async () => {
 
         await video.play();
 
-        // Afficher le bouton uniquement lorsque la webcam est prête
         takeButton.hidden = false;
         takeButton.disabled = false;
 
@@ -125,8 +122,6 @@ startButton.addEventListener("click", async () => {
     }
 });
 
-
-// Prendre une photo
 takeButton.addEventListener("click", () => {
     if (!stream || video.videoWidth === 0) {
         alert("La webcam n'est pas prête.");
@@ -156,8 +151,6 @@ takeButton.addEventListener("click", () => {
     }, "image/jpeg", 0.92);
 });
 
-
-// Importer une image
 importButton.addEventListener("click", () => {
     photoInput.click();
 });
@@ -167,8 +160,8 @@ photoInput.addEventListener("change", () => {
 
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-        alert("Veuillez sélectionner une image.");
+    if (!["image/png", "image/jpeg"].includes(file.type)) {
+        alert("Veuillez sélectionner une image PNG ou JPEG.");
         photoInput.value = "";
         return;
     }
@@ -197,84 +190,9 @@ photoInput.addEventListener("change", () => {
     image.src = temporaryUrl;
 });
 
-
-// Publier la photo avec PHP GD
-async function publishPhoto() {
-
-    if (!photoUrl) {
-        alert("Aucune photo à publier.");
-        return;
-    }
-
-    publishButton.disabled = true;
-    publishButton.textContent = "Publication en cours...";
-
-    try {
-
-        // Récupérer l'image affichée
-        const response = await fetch(photoUrl);
-
-        if (!response.ok) {
-            throw new Error("Impossible de récupérer la photo.");
-        }
-
-        const blob = await response.blob();
-
-        // Préparer les données à envoyer
-        const formData = new FormData();
-
-        formData.append("photo", blob, "photo.jpg");
-
-        // Envoyer au serveur PHP
-        const result = await fetch("/api/test-gd.php", {
-            method: "POST",
-            body: formData
-        });
-
-        const responseText = await result.text();
-
-        console.log("Réponse PHP :", responseText);
-
-        let data;
-
-        try {
-            data = JSON.parse(responseText);
-        } catch (error) {
-            throw new Error(
-                "Le serveur PHP n'a pas renvoyé du JSON valide. Consulte la console."
-            );
-        }
-
-        if (!result.ok || !data.success) {
-            throw new Error(data.message || "Erreur lors du traitement.");
-        }
-
-        console.log(data);
-
-        alert("Photo traitée avec succès par GD !");
-
-    } catch (error) {
-
-        console.error(error);
-        alert(error.message);
-
-    } finally {
-
-        publishButton.disabled = false;
-        publishButton.textContent = "Publier";
-
-    }
-}
-
-
-// Événement du bouton Publier
-publishButton.addEventListener("click", publishPhoto);
-
-
-// Reprendre une photo
 retakeButton.addEventListener("click", () => {
-
     cameraContainer.hidden = false;
+
     takeButton.hidden = true;
     takeButton.disabled = true;
 
@@ -283,7 +201,6 @@ retakeButton.addEventListener("click", () => {
 
     photoView.hidden = true;
     retakeButton.hidden = true;
-    addElements.hidden = true;
     publishButton.hidden = true;
 
     photo.removeAttribute("src");
@@ -294,10 +211,12 @@ retakeButton.addEventListener("click", () => {
     }
 
     photoInput.value = "";
+
+    document.dispatchEvent(
+        new Event("camagru:photo-reset")
+    );
 });
 
-
-// Libérer les ressources quand l'utilisateur quitte la page
 window.addEventListener("pagehide", () => {
     if (stream) {
         stream.getTracks().forEach(track => track.stop());

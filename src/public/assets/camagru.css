@@ -4,7 +4,6 @@ main {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-
     position: relative;
 }
 
@@ -43,28 +42,26 @@ main button {
     box-sizing: border-box;
 
     display: flex;
-    justify-content: center;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
 
     gap: 15px;
-    overflow: hidden;
 
     min-width: 0;
     min-height: 0;
+
+    overflow: visible;
 }
 
-#startCamera {
+#startCamera,
+#importImage {
     background: #16a34a;
 }
 
 #startCamera.camera-on,
 #back {
     background: #dc2626;
-}
-
-#importImage {
-    background: #16a34a;
 }
 
 #takePhoto {
@@ -76,7 +73,6 @@ main button {
     padding: 0;
     border-radius: 50%;
 
-    cursor: pointer;
     flex-shrink: 0;
 }
 
@@ -88,15 +84,12 @@ main button {
 
     padding: 0;
 
-    cursor: pointer;
     flex-shrink: 0;
+    position: relative;
+    z-index: 2;
 }
 
-#addElements {
-    background: #16a34a;
-}
-
-/* Conteneur de l'image et de la webcam */
+/* Conteneur de la webcam */
 .visual-container {
     width: 100%;
     height: 100%;
@@ -111,26 +104,9 @@ main button {
     overflow: hidden;
 }
 
-/* Image et webcam */
-#webcam,
-#photo {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    min-width: 0;
-    min-height: 0;
-
-    object-fit: contain;
-    object-position: center;
-}
-
-/* Zone d'affichage */
-#cameraContainer,
+/* Vue de la photo */
 #photoView {
     width: 100%;
-    height: 100%;
 
     flex: 1;
     min-width: 0;
@@ -141,6 +117,161 @@ main button {
     align-items: center;
 }
 
+/* Éditeur */
+.editor {
+    position: relative;
+
+    max-width: 100%;
+    max-height: 100%;
+
+    margin: auto;
+
+    overflow: hidden;
+
+    touch-action: none;
+    user-select: none;
+}
+
+.editor #photo {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: fill;
+
+    pointer-events: none;
+}
+
+.editor #overlay {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 25%;
+    height: auto;
+
+    cursor: move;
+
+    touch-action: none;
+    user-select: none;
+}
+
+/* Contrôle de taille */
+#elementControls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    margin-top: 20px;
+    width: 100%;
+}
+
+#elementControls label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#elementSize {
+    width: 100%;
+
+    cursor: pointer;
+    accent-color: #16a34a;
+}
+
+#elementSize:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+/* Galerie */
+#stickerGallery {
+    width: 100%;
+    max-width: 250px;
+
+    margin-top: 20px;
+}
+
+#stickerList {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.sticker-item {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    padding: 5px;
+
+    background: #f3f4f6;
+
+    border: 2px solid transparent;
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.sticker-item img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+.sticker-item.active {
+    border-color: #16a34a;
+}
+
+/* Webcam */
+#webcam {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+    object-position: center;
+}
+
+/* Zone caméra */
+#cameraContainer {
+    width: 100%;
+
+    flex: 1;
+
+    min-width: 0;
+    min-height: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Éléments masqués */
 [hidden] {
     display: none !important;
+}
+
+/* Adaptation mobile */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 25%;
+    }
+
+    .content {
+        width: 65%;
+    }
+
+    #stickerGallery {
+        max-width: 100%;
+    }
+
+    #stickerList {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
