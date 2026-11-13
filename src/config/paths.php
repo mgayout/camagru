@@ -17,6 +17,8 @@ define('RESET_PASSWORD_VIEW', VIEW_PATH . '/main/reset-password.php');
 
 define('CAMAGRU_VIEW', VIEW_PATH . '/main/camagru.php');
 
+define('GALLERY_VIEW', VIEW_PATH . '/main/gallery.php');
+
 define('SETTINGS_VIEW', VIEW_PATH . '/main/settings.php');
 
 define('FOOTER_VIEW', VIEW_PATH . '/footer.php');

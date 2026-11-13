@@ -10,6 +10,7 @@ $homeController = new HomeController();
 $loginController = new LoginController();
 $registerController = new RegisterController();
 $camagruController = new CamagruController();
+$galleryController = new GalleryController();
 $logoutController = new LogoutController();
 $settingsController = new SettingsController();
 
@@ -32,9 +33,10 @@ $router->post('/reset-password', [$loginController, 'resetPassword']);
 $router->auth('/camagru', [$camagruController, 'index']);
 $router->auth('/camagru/stickers', [$camagruController, 'getStickers']);
 $router->auth('/camagru/getPhotos', [$camagruController, 'getPhotos']);
-
 $router->post('/camagru/publish', [$camagruController, 'publishContent']);
 $router->post('/camagru/deletePhoto', [$camagruController, 'deletePhoto']);
+
+$router->get('/gallery', [$galleryController, 'index']);
 
 $router->auth('/logout', [$logoutController, 'logout']);
 
@@ -45,7 +47,4 @@ $router->post('/settings/updatePassword', [$settingsController, 'updatePassword'
 $router->post('/settings/updateNotification', [$settingsController, 'updateNotification']);
 $router->post('/delete', [$settingsController, 'delete']);
 
-$router->dispatch(
-    $_SERVER['REQUEST_METHOD'],
-    parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
-);
+$router->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));

@@ -261,6 +261,7 @@ class CamagruController
             'width' => $photoWidth,
             'height' => $photoHeight
         ]);
+
     }
 
     public function getStickers(): void

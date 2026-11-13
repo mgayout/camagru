@@ -24,15 +24,15 @@ TODO :
 
 - Galery features
 
-- [ ] Création d'une gallerie de photos (utilisateur non connecté)
-    - [ ] Message d'erreur : 
+- [X] Création d'une gallerie de photos (utilisateur non connecté)
+    - [X] Message d'erreur : 
         - [ ] Commenter un poste
         - [ ] Liker un poste
-- [ ] Affichage du contenu pour tous
-- [ ] Contenu trier par date
+- [X] Affichage du contenu pour tous
+- [X] Contenu trier par date
 - [ ] Notification par mail d'un like et commentaire
     - [X] Modifiable dans les parametre du compte
-- [ ] Minimum 5 éléments par page
+- [X] Minimum 5 éléments par page
 
 - Editing features
 

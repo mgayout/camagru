@@ -1,4 +1,3 @@
-
 const stickerGallery = document.getElementById("stickerGallery");
 const stickerList = document.getElementById("stickerList");
 
@@ -89,7 +88,7 @@ async function loadStickers() {
 
     } catch (error) {
         console.error(error);
-        alert("Impossible de charger les stickers : " + error.message);
+        console.error("Impossible de charger les stickers :", error.message);
     }
 }
 
@@ -146,7 +145,6 @@ document.addEventListener("camagru:photo-reset", () => {
 // Sélectionner ou désélectionner un sticker
 function selectSticker(sticker, button) {
 
-    // Si le sticker est déjà sélectionné, le supprimer
     if (
         selectedSticker &&
         selectedSticker.filename === sticker.filename
@@ -190,7 +188,7 @@ function selectSticker(sticker, button) {
     };
 
     overlay.onerror = () => {
-        alert("Impossible de charger ce sticker.");
+        console.error("Impossible de charger ce sticker.");
 
         selectedSticker = null;
         elementSize.disabled = true;
@@ -320,16 +318,16 @@ window.addEventListener("resize", () => {
 });
 
 
-// Publier le montage avec PHP GD
+// Publier le montage
 publishPhoto.addEventListener("click", async () => {
 
     if (!photo.src || !photo.naturalWidth) {
-        alert("Aucune photo principale.");
+        console.error("Aucune photo principale.");
         return;
     }
 
     if (!selectedSticker || overlay.hidden) {
-        alert("Sélectionne un sticker avant de publier.");
+        console.error("Aucun sticker sélectionné.");
         return;
     }
 
@@ -379,15 +377,12 @@ publishPhoto.addEventListener("click", async () => {
             );
         }
 
-        alert("Montage enregistré avec succès !");
-
-        console.log(result);
+        // Recharger la page sur la même URL
+        window.location.reload();
 
     } catch (error) {
-        console.error(error);
-        alert(error.message || "Une erreur est survenue.");
+        console.error("Erreur lors de la publication :", error);
 
-    } finally {
         publishPhoto.disabled = false;
         publishPhoto.textContent = "Publier";
     }
