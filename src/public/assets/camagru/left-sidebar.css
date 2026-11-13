@@ -1,0 +1,69 @@
+
+.left-sidebar {
+    width: 15%;
+
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: 15px;
+}
+
+#startCamera {
+    background: #16a34a;
+}
+
+#importImage {
+    background: #16a34a;
+}
+
+#startCamera.camera-on,
+#back {
+    background: #dc2626;
+}
+
+#stickerGallery {
+    width: 100%;
+    max-width: 250px;
+
+    margin-top: 20px;
+}
+
+#stickerList {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+    margin-top: 10px;
+}
+
+#elementControls {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 20px;
+    width: 100%;
+}
+
+#elementControls label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#elementSize {
+    width: 100%;
+
+    cursor: pointer;
+    accent-color: #16a34a;
+}
+
+#elementSize:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+}

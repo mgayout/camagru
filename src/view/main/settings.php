@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="/assets/main.css">
 <link rel="stylesheet" href="/assets/settings.css">
 <script type="module" src="scripts/settings/sidebar_animation.js" defer></script>
 <script type="module" src="scripts/settings/events.js" defer></script>

@@ -1,0 +1,143 @@
+
+.right-sidebar {
+    width: 20%;
+
+    height: fit-content;
+    max-height: 85%;
+
+    flex-shrink: 0;
+    align-self: center;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 0 auto;
+    padding: 10px;
+
+    overflow: hidden;
+}
+
+.right-sidebar h3 {
+    margin: 0 0 15px 0;
+
+    font-size: 18px;
+
+    flex-shrink: 0;
+    text-align: center;
+}
+
+#photoGallery {
+    width: 100%;
+
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: 500px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 5px;
+}
+
+.saved-photo {
+    width: 100%;
+
+    flex-shrink: 0;
+    position: relative;
+
+    cursor: pointer;
+
+    border-radius: 8px;
+    overflow: hidden;
+
+    transition: transform 0.2s;
+}
+
+.saved-photo:hover {
+    transform: scale(1.03);
+}
+
+.saved-photo img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+}
+
+/* Bouton de suppression */
+
+.delete-photo {
+    position: absolute;
+
+    top: 8px;
+    right: 8px;
+
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background-color: rgba(220, 38, 38, 0.9);
+    color: white;
+
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1;
+
+    cursor: pointer;
+
+    opacity: 0;
+    transition: opacity 0.2s, background-color 0.2s;
+}
+
+.saved-photo:hover .delete-photo {
+    opacity: 1;
+}
+
+.delete-photo:hover {
+    background-color: #991b1b;
+}
+
+.saved-photo .photo-date {
+    font-size: 11px;
+    color: #777;
+
+    margin-top: 4px;
+    text-align: center;
+}
+
+/* Scrollbar */
+
+#photoGallery::-webkit-scrollbar {
+    width: 6px;
+}
+
+#photoGallery::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#photoGallery::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+#photoGallery::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

@@ -16,10 +16,10 @@ RUN docker-php-ext-install pdo pdo_mysql
 COPY src/ /var/www/html/
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
-# Création du dossier uploads et configuration des permissions
-RUN mkdir -p /var/www/html/uploads \
-    && chown -R www-data:www-data /var/www/html/uploads \
-    && chmod 755 /var/www/html/uploads
+# Création du dossier uploads dans le répertoire public
+RUN mkdir -p /var/www/html/public/uploads \
+    && chown -R www-data:www-data /var/www/html/public/uploads \
+    && chmod 755 /var/www/html/public/uploads
 
 # Installation de msmtp
 RUN apt-get update && apt-get install -y --no-install-recommends msmtp-mta \

@@ -42,14 +42,14 @@ TODO :
 - Main :
 - [X] Bouton Webcam
 - [X] Bouton Image PC
-- [ ] Liste des éléments supperposables
+- [X] Liste des éléments supperposables
 
 - Side : 
-- [ ] Affichage des Images et/ou capture webcam
-    - [ ] Sélectionnable ou supprimable
+- [X] Affichage des Images et/ou capture webcam
+    - [X] Sélectionnable ou supprimable
 
-- [ ] Nécessite au moins 1 éléments supperposables pour que l'image soit valide
-- [ ] La superposition doit se faire côté server
+- [X] Nécessite au moins 1 éléments supperposables pour que l'image soit valide
+- [X] La superposition doit se faire côté server
 
 - Constraints and Mandatory things
 

@@ -1,0 +1,45 @@
+
+.content {
+    flex: 1;
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: 15px;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+}
+
+#takePhoto {
+    background: #dc2626;
+
+    width: 40px;
+    height: 40px;
+
+    padding: 0;
+
+    border-radius: 50%;
+
+    flex-shrink: 0;
+}
+
+#publishPhoto {
+    background: #16a34a;
+
+    width: 120px;
+    height: 40px;
+
+    padding: 0;
+
+    flex-shrink: 0;
+
+    position: relative;
+    z-index: 2;
+}

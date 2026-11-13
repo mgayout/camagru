@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="/assets/main.css">
 <main>
     <h1>Réinitialiser mon mot de passe</h1>
 

@@ -31,7 +31,10 @@ $router->post('/reset-password', [$loginController, 'resetPassword']);
 
 $router->auth('/camagru', [$camagruController, 'index']);
 $router->auth('/camagru/stickers', [$camagruController, 'getStickers']);
+$router->auth('/camagru/getPhotos', [$camagruController, 'getPhotos']);
+
 $router->post('/camagru/publish', [$camagruController, 'publishContent']);
+$router->post('/camagru/deletePhoto', [$camagruController, 'deletePhoto']);
 
 $router->auth('/logout', [$logoutController, 'logout']);
 

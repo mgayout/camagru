@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="/assets/main.css">
 <main>
 	<h1>Créer un compte</h1>
 

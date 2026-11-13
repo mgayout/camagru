@@ -1,9 +1,12 @@
-<link rel="stylesheet" href="/assets/main.css">
-<link rel="stylesheet" href="/assets/camagru.css">
+<link rel="stylesheet" href="/assets/camagru/main.css">
+<link rel="stylesheet" href="/assets/camagru/left-sidebar.css">
+<link rel="stylesheet" href="/assets/camagru/content.css">
+<link rel="stylesheet" href="/assets/camagru/right-sidebar.css">
 <script type="module" src="/scripts/camagru/webcam.js" defer></script>
 <script type="module" src="/scripts/camagru/editor.js" defer></script>
+<script type="module" src="/scripts/camagru/gallery.js" defer></script>
 <main>
-    <div class="sidebar">
+    <div class="left-sidebar">
         <button id="back" type="button" hidden>Retour</button>
         <button id="startCamera" type="button">Activer la webcam</button>
         <button id="importImage" type="button">Importer une image</button>
@@ -13,7 +16,7 @@
         </div>
         <div id="elementControls" hidden>
             <label for="elementSize"></label>
-            <input type="range" id="elementSize" min="5" max="50" value="25" disabled/>
+            <input type="range" id="elementSize" min="10" max="40" value="25" disabled/>
         </div>
     </div>
     <div class="content">
@@ -30,4 +33,7 @@
         </div>
         <button id="publishPhoto" type="button" hidden>Publier</button>
     </div>
+    <aside class="right-sidebar">
+        <div id="photoGallery"></div>
+    </aside>
 </main>

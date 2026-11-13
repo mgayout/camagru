@@ -1,9 +1,12 @@
+
 services:
   web:
     build: .
     container_name: camagru
     ports:
       - "8080:80"
+    volumes:
+      - ./src/public/uploads:/var/www/html/public/uploads
     depends_on:
       - db
       - mailhog
