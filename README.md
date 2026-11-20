@@ -25,9 +25,8 @@ TODO :
 - Galery features
 
 - [X] Création d'une gallerie de photos (utilisateur non connecté)
-    - [X] Message d'erreur : 
-        - [ ] Commenter un poste
-        - [ ] Liker un poste
+    - [X] Commenter un poste
+    - [X] Liker un poste
 - [X] Affichage du contenu pour tous
 - [X] Contenu trier par date
 - [ ] Notification par mail d'un like et commentaire
@@ -46,7 +45,6 @@ TODO :
 
 - Side : 
 - [X] Affichage des Images et/ou capture webcam
-    - [X] Sélectionnable ou supprimable
 
 - [X] Nécessite au moins 1 éléments supperposables pour que l'image soit valide
 - [X] La superposition doit se faire côté server

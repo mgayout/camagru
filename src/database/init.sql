@@ -22,3 +22,32 @@ CREATE TABLE photos (
     FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE photo_likes (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    photo_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE KEY unique_photo_like (photo_id, user_id),
+
+    FOREIGN KEY (photo_id) REFERENCES photos(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE photo_comments (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    photo_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (photo_id) REFERENCES photos(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE
+);

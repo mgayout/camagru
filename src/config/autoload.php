@@ -3,8 +3,6 @@
 spl_autoload_register(function (string $class): void {
     $directories = [
         __DIR__ . '/../controller/',
-        __DIR__ . '/../model/',
-        __DIR__ . '/../router/',
         __DIR__ . '/../config/',
     ];
 

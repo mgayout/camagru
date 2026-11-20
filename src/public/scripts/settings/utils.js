@@ -1,5 +1,3 @@
-// console.log('UTILS.JS MODIFIÉ EST CHARGÉ');
-
 export async function sendSettingsRequest(url, data) {
     const response = await fetch(url, {
         method: 'POST',
@@ -10,10 +8,6 @@ export async function sendSettingsRequest(url, data) {
     });
 
     const text = await response.text();
-
-    console.log('URL :', url);
-    console.log('Statut HTTP :', response.status);
-    console.log('Réponse serveur :', text);
 
     let result;
 

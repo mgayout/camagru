@@ -2,94 +2,151 @@
 
 class GalleryController
 {
+    private Database $database;
     private PDO $pdo;
 
     private const PHOTOS_PER_PAGE = 8;
 
     public function __construct()
     {
-        $database = new Database();
-        $this->pdo = $database->getConnection();
+        $this->database = new Database();
+        $this->pdo = $this->database->getConnection();
+    }
+
+    private function renderGallery(array $errors, ?int $user_id, int $currentPage): void
+    {
+        $username = $_SESSION['username'] ?? null;
+        $email = $_SESSION['email'] ?? null;
+
+        $offset = ($currentPage - 1) * self::PHOTOS_PER_PAGE;
+        $photos = $this->database->getPhotosPaginated($user_id, self::PHOTOS_PER_PAGE, $offset);
+        $totalPages = (int) ceil($this->database->getTotalPhotos() / self::PHOTOS_PER_PAGE);
+        $commentsByPhoto = $this->database->getCommentsByPhotoIds(array_column($photos, 'id'));
+
+        $title = 'Gallerie';
+        $headerView = isset($user_id) ? HEADERON_VIEW : HEADEROFF_VIEW;
+        $mainView = GALLERY_VIEW;
+
+        require LAYOUT_VIEW;
     }
 
     public function index(): void
     {
-        $username = $_SESSION['username'] ?? null;
-        $user_id = $_SESSION['user_id'] ?? null;
+        $errors = [];
+        $user_id = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null;
+        $currentPage = filter_var($_POST['page'] ?? 1, FILTER_VALIDATE_INT);
 
-        $title = 'Galerie';
+        $this->renderGallery($errors, $user_id, $currentPage);
+    }
 
-        $headerView = isset($user_id)
-            ? HEADERON_VIEW
-            : HEADEROFF_VIEW;
+    public function like(): void
+    {
+        $errors = [];
 
-        $mainView = GALLERY_VIEW;
+        if (!isset($_SESSION['user_id'])) {
+            http_response_code(401);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Vous devez être connecté pour aimer une photo.'
+            ]);
+            return;
+        }
 
-        // Récupérer le numéro de page
-        $currentPage = filter_input(
-            INPUT_GET,
-            'page',
-            FILTER_VALIDATE_INT
-        );
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode([
+                'success' => false,
+                'message' => 'La méthode n\'est pas autorisée'
+            ]);
+            return;
+        }
 
-        if (!$currentPage || $currentPage < 1) {
-            $currentPage = 1;
+        $photo_id = filter_var($_POST['photo_id'] ?? null, FILTER_VALIDATE_INT);
+
+        try {
+            $user_id = (int) $_SESSION['user_id'];
+            $currentPage = filter_var($_POST['page'] ?? 1, FILTER_VALIDATE_INT);
+            $liked = $this->database->getLike($photo_id, $user_id);
+
+            if ($liked) {
+                $this->database->setLikeOff($photo_id, $user_id);
+            } else {
+                $this->database->setLikeOn($photo_id, $user_id);
+                $this->sendNotificationMail("like");
+            }
+            $this->renderGallery($errors, $user_id, $currentPage);
+            exit;
+        }
+        catch(PDOException $e) {
+            error_log($e->getMessage());
+            http_response_code(500);
+            return;
+        }
+    }
+
+    public function comment(): void
+    {
+        $errors = [];
+
+        if (!isset($_SESSION['user_id'])) {
+            http_response_code(401);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Vous devez être connecté pour commenter une photo.'
+            ]);
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode([
+                'success' => false,
+                'message' => 'La méthode n\'est pas autorisée.'
+            ]);
+            return;
+        }
+
+        $photo_id = filter_var($_POST['photo_id'] ?? null, FILTER_VALIDATE_INT);
+        $data = trim($_POST['content'] ?? '');
+
+        if ($data === '' || mb_strlen($data) > 1000) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Le commentaire doit contenir entre 1 et 1000 caractères.'
+            ]);
         }
 
         try {
-            // Compter le nombre total de photos
-            $stmt = $this->pdo->query(
-                'SELECT COUNT(*) FROM photos'
-            );
-
-            $totalPhotos = (int) $stmt->fetchColumn();
-
-            // Calculer le nombre total de pages
-            $totalPages = (int) ceil(
-                $totalPhotos / self::PHOTOS_PER_PAGE
-            );
-
-            // Éviter de demander une page inexistante
-            if ($totalPages > 0 && $currentPage > $totalPages) {
-                $currentPage = $totalPages;
-            }
-
-            // Calculer le décalage SQL
-            $offset = ($currentPage - 1) * self::PHOTOS_PER_PAGE;
-
-            // Récupérer les photos de la page actuelle
-            $stmt = $this->pdo->prepare(
-                'SELECT id, user_id, filename, created_at
-                 FROM photos
-                 ORDER BY created_at DESC, id DESC
-                 LIMIT :limit OFFSET :offset'
-            );
-
-            $stmt->bindValue(
-                ':limit',
-                self::PHOTOS_PER_PAGE,
-                PDO::PARAM_INT
-            );
-
-            $stmt->bindValue(
-                ':offset',
-                $offset,
-                PDO::PARAM_INT
-            );
-
-            $stmt->execute();
-
-            $photos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        } catch (PDOException $e) {
-            error_log($e->getMessage());
-
-            $photos = [];
-            $totalPhotos = 0;
-            $totalPages = 0;
-            $currentPage = 1;
+            $user_id = (int) $_SESSION['user_id'];
+            $currentPage = filter_var($_POST['page'] ?? 1, FILTER_VALIDATE_INT);
+            $commented = $this->database->setComment($photo_id, $user_id, $data);
+            $this->sendNotificationMail("comment");
+            $this->renderGallery($errors, $user_id, $currentPage);
+            exit;
         }
+        catch(PDOException $e) {
+            error_log($e->getMessage());
+            http_response_code(500);
+            return;
+        }
+    }
 
-        require LAYOUT_VIEW;
+    public function sendNotificationMail(string $email, string $receiver, string $sender, string $like_or_comment): bool
+    {
+        $subject = "Notification";
+
+        $messages = [
+            "like" => "Bonjour {$receiver} !\n\n{$sender} a aimé votre photo !\n\nQuel succès !",
+            "comment" => "Bonjour {$receiver} !\n\n{$sender} a commenté votre photo !\n\nDépêchez-vous d'aller lire son commentaire !"
+        ];
+        
+        $headers = [
+            "From" => "noreply@camagru.test",
+            "Content-Type" => "text/plain; charset=UTF-8",];
+
+        $result = mail($email, $subject, $messages[$like_or_comment], $headers);
+
+        return $result;
     }
 }
