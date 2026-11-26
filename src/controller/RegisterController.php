@@ -30,8 +30,6 @@ class RegisterController
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
         $user_id = $_SESSION['user_id'] ?? null;
-
-        // Empty field [user, email, pwd]
         
         if ($username === '')
             $errors[] = 'Le nom d\'utilisateur est obligatoire.';
@@ -42,8 +40,6 @@ class RegisterController
         if ($password === '')
             $errors[] = 'Le mot de passe est obligatoire.';
 
-        // Invalid format [user, email, pwd]
-
         if ($this->usernameCheck($username))
             $errors[] = 'Le nom d\'utilisateur est invalide.';
 
@@ -52,8 +48,6 @@ class RegisterController
 
         if ($this->passwordCheck($password))
             $errors[] = 'Le mot de passe est invalide.';
-
-        // Already used [user, email]
 
         if (!empty($errors)) {
             $this->renderRegister($errors, $username, $user_id, $email);

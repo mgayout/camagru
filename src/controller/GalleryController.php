@@ -34,7 +34,11 @@ class GalleryController
     {
         $errors = [];
         $user_id = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null;
-        $currentPage = filter_var($_POST['page'] ?? 1, FILTER_VALIDATE_INT);
+        $currentPage = filter_var($_GET['page'] ?? 1, FILTER_VALIDATE_INT);
+
+        if ($currentPage === false || $currentPage < 1) {
+            $currentPage = 1;
+        }
 
         $this->renderGallery($errors, $user_id, $currentPage);
     }
@@ -65,6 +69,9 @@ class GalleryController
 
         try {
             $user_id = (int) $_SESSION['user_id'];
+            $email = $_SESSION['email'] ?? null;
+            $username = $_SESSION['username'] ?? null;
+            $receiver = $this->database->getUsernameByPhotoId($photo_id);
             $currentPage = filter_var($_POST['page'] ?? 1, FILTER_VALIDATE_INT);
             $liked = $this->database->getLike($photo_id, $user_id);
 
@@ -72,7 +79,7 @@ class GalleryController
                 $this->database->setLikeOff($photo_id, $user_id);
             } else {
                 $this->database->setLikeOn($photo_id, $user_id);
-                $this->sendNotificationMail("like");
+                $this->sendNotificationMail($email, $receiver, $username, "like");
             }
             $this->renderGallery($errors, $user_id, $currentPage);
             exit;
@@ -119,9 +126,12 @@ class GalleryController
 
         try {
             $user_id = (int) $_SESSION['user_id'];
+            $email = $_SESSION['email'] ?? null;
+            $username = $_SESSION['username'] ?? null;
+            $receiver = $this->database->getUsernameByPhotoId($photo_id);
             $currentPage = filter_var($_POST['page'] ?? 1, FILTER_VALIDATE_INT);
-            $commented = $this->database->setComment($photo_id, $user_id, $data);
-            $this->sendNotificationMail("comment");
+            $this->database->setComment($photo_id, $user_id, $data);
+            $this->sendNotificationMail($email, $receiver, $username, "comment");
             $this->renderGallery($errors, $user_id, $currentPage);
             exit;
         }
@@ -134,11 +144,20 @@ class GalleryController
 
     public function sendNotificationMail(string $email, string $receiver, string $sender, string $like_or_comment): bool
     {
+
+        if ($receiver === $sender) {
+            return false;
+        }
+
+        if (!$this->database->getNotificationStatus($receiver, $like_or_comment)) {
+            return false;
+        }
+
         $subject = "Notification";
 
         $messages = [
             "like" => "Bonjour {$receiver} !\n\n{$sender} a aimé votre photo !\n\nQuel succès !",
-            "comment" => "Bonjour {$receiver} !\n\n{$sender} a commenté votre photo !\n\nDépêchez-vous d'aller lire son commentaire !"
+            "comment" => "Bonjour {$receiver} !\n\n{$sender} a commenté votre photo !\n\nDépêches-toi d'aller lire son commentaire !"
         ];
         
         $headers = [

@@ -29,7 +29,7 @@ TODO :
     - [X] Liker un poste
 - [X] Affichage du contenu pour tous
 - [X] Contenu trier par date
-- [ ] Notification par mail d'un like et commentaire
+- [X] Notification par mail d'un like et commentaire
     - [X] Modifiable dans les parametre du compte
 - [X] Minimum 5 éléments par page
 

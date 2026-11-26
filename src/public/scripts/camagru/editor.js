@@ -24,8 +24,6 @@ let initialY = 0;
 let selectedSticker = null;
 let stickersLoaded = false;
 
-
-// Adapter l'éditeur aux proportions de la photo
 function resizeEditor() {
     if (!photo.naturalWidth || !photo.naturalHeight) return;
 
@@ -43,8 +41,6 @@ function resizeEditor() {
     editor.style.height = `${photo.naturalHeight * ratio}px`;
 }
 
-
-// Charger les stickers
 async function loadStickers() {
     try {
         const response = await fetch("/camagru/stickers");
@@ -92,8 +88,6 @@ async function loadStickers() {
     }
 }
 
-
-// Afficher la galerie
 async function showStickerGallery() {
     stickerGallery.hidden = false;
 
@@ -102,8 +96,6 @@ async function showStickerGallery() {
     }
 }
 
-
-// Photo prête
 document.addEventListener("camagru:photo-ready", () => {
     requestAnimationFrame(() => {
         resizeEditor();
@@ -115,8 +107,6 @@ document.addEventListener("camagru:photo-ready", () => {
     });
 });
 
-
-// Réinitialiser l'éditeur
 document.addEventListener("camagru:photo-reset", () => {
     selectedSticker = null;
 
@@ -141,8 +131,6 @@ document.addEventListener("camagru:photo-reset", () => {
     });
 });
 
-
-// Sélectionner ou désélectionner un sticker
 function selectSticker(sticker, button) {
 
     if (
@@ -199,15 +187,11 @@ function selectSticker(sticker, button) {
     overlay.src = sticker.url;
 }
 
-
-// Mettre à jour la position
 function updatePosition() {
     overlay.style.left = `${overlayX}px`;
     overlay.style.top = `${overlayY}px`;
 }
 
-
-// Modifier la taille
 elementSize.addEventListener("input", () => {
     if (!selectedSticker || overlay.hidden) return;
 
@@ -226,8 +210,6 @@ elementSize.addEventListener("input", () => {
     updatePosition();
 });
 
-
-// Début du déplacement
 overlay.addEventListener("pointerdown", event => {
     if (overlay.hidden) return;
 
@@ -242,8 +224,6 @@ overlay.addEventListener("pointerdown", event => {
     initialY = overlayY;
 });
 
-
-// Déplacement
 overlay.addEventListener("pointermove", event => {
     if (!isDragging) return;
 
@@ -268,8 +248,6 @@ overlay.addEventListener("pointermove", event => {
     updatePosition();
 });
 
-
-// Fin du déplacement
 overlay.addEventListener("pointerup", () => {
     isDragging = false;
 });
@@ -278,8 +256,6 @@ overlay.addEventListener("pointercancel", () => {
     isDragging = false;
 });
 
-
-// Redimensionnement de la fenêtre
 window.addEventListener("resize", () => {
     if (!photo.naturalWidth) return;
 
@@ -317,8 +293,6 @@ window.addEventListener("resize", () => {
     });
 });
 
-
-// Publier le montage
 publishPhoto.addEventListener("click", async () => {
 
     if (!photo.src || !photo.naturalWidth) {
@@ -348,7 +322,6 @@ publishPhoto.addEventListener("click", async () => {
         formData.append("photo", photoBlob, "photo.jpg");
         formData.append("sticker", selectedSticker.filename);
 
-        // Coordonnées normalisées
         formData.append(
             "x",
             overlayX / editor.clientWidth
@@ -377,7 +350,6 @@ publishPhoto.addEventListener("click", async () => {
             );
         }
 
-        // Recharger la page sur la même URL
         window.location.reload();
 
     } catch (error) {
@@ -388,7 +360,5 @@ publishPhoto.addEventListener("click", async () => {
     }
 });
 
-
-// État initial
 elementControls.hidden = true;
 elementSize.disabled = true;

@@ -1,0 +1,127 @@
+.photo-actions {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 25px;
+
+    z-index: 5;
+
+    opacity: 0;
+    visibility: hidden;
+
+    pointer-events: none;
+
+    background: rgba(0, 0, 0, 0.12);
+
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
+}
+
+.photo-image-container:hover .photo-actions,
+.photo-image-container:focus-within .photo-actions {
+    opacity: 1;
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+.like-form {
+    display: flex;
+
+    margin: 0;
+    padding: 0;
+}
+
+.photo-actions button {
+    position: relative;
+    z-index: 6;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 7px;
+
+    min-width: 60px;
+    height: 60px;
+
+    padding: 10px;
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.75);
+
+    cursor: pointer;
+    pointer-events: auto;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.photo-actions button:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: scale(1.12);
+}
+
+.photo-actions button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.photo-actions button img,
+.photo-counter img {
+    display: block;
+
+    width: 28px;
+    height: 28px;
+
+    object-fit: contain;
+
+    pointer-events: none;
+}
+
+.photo-actions .like-button.liked {
+    background: rgba(255, 220, 220, 0.9);
+    border-color: rgba(230, 57, 70, 0.5);
+}
+
+.photo-actions span {
+    color: #333;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    pointer-events: none;
+}
+
+.photo-counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 7px;
+
+    min-width: 60px;
+    height: 60px;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.75);
+
+    color: #333;
+
+    font-size: 12px;
+    font-weight: 600;
+}

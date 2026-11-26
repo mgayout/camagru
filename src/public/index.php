@@ -39,7 +39,6 @@ $router->post('/camagru/deletePhoto', [$camagruController, 'deletePhoto']);
 $router->get('/gallery', [$galleryController, 'index']);
 $router->post('/gallery/like', [$galleryController, 'like']);
 $router->post('/gallery/comment', [$galleryController, 'comment']);
-// $router->auth('/gallery/sendNotification', [$galleryController, 'sendNotification']);
 
 $router->auth('/logout', [$logoutController, 'logout']);
 

@@ -156,6 +156,46 @@ class Database
         return $commentsByPhoto;
     }
 
+    public function getUsernameByPhotoId(int $photo_id): string
+    {
+        $query = '
+            SELECT users.username
+            FROM photos
+            INNER JOIN users ON photos.user_id = users.id
+            WHERE photos.id = :photo_id
+        ';
+
+        $statement = $this->connection->prepare($query);
+        $statement->execute(['photo_id' => $photo_id]);
+
+        return $statement->fetchColumn();
+    }
+
+    public function getNotificationStatus(string $username, string $like_or_comment): bool
+    {
+        $columns = [
+            'like' => 'like_notification',
+            'comment' => 'comment_notification'
+        ];
+
+        if (!isset($columns[$like_or_comment])) {
+            throw new InvalidArgumentException('Type de notification invalide.');
+        }
+
+        $column = $columns[$like_or_comment];
+
+        $query = "
+            SELECT $column
+            FROM users
+            WHERE username = :username
+        ";
+
+        $statement = $this->connection->prepare($query);
+        $statement->execute([':username' => $username]);
+
+        return (bool) $statement->fetchColumn();
+    }
+
     // SETTERS
 
     public function setLikeOn(int $photo_id, int $user_id): bool

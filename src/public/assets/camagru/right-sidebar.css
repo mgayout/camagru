@@ -74,8 +74,6 @@
     border-radius: 8px;
 }
 
-/* Bouton de suppression */
-
 .delete-photo {
     position: absolute;
 
@@ -122,8 +120,6 @@
     margin-top: 4px;
     text-align: center;
 }
-
-/* Scrollbar */
 
 #photoGallery::-webkit-scrollbar {
     width: 6px;

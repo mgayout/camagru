@@ -25,8 +25,6 @@ class SettingsController
         require LAYOUT_VIEW;
     }
 
-    // USER
-
     public function updateUsername(): void
     {
         $data = $this->firstCheckRequest();
@@ -111,8 +109,6 @@ class SettingsController
         $this->lastCheckRequest($success);
     }
 
-    // NOTIFICATION
-
     public function updateNotification(): void
     {
         $data = $this->firstCheckRequest();
@@ -142,8 +138,6 @@ class SettingsController
         $this->lastCheckRequest($success);
     }
 
-    // DELETE
-
     public function delete(): void
     {
         if (!isset($_SESSION['user_id'])) {
@@ -164,8 +158,6 @@ class SettingsController
         http_response_code(500);
         echo 'Impossible de supprimer le compte.';
     }
-
-    // UTILS
 
     private function firstCheckRequest(): ?array
     {

@@ -22,12 +22,10 @@ async function loadPhotos() {
             const container = document.createElement('div');
             container.classList.add('saved-photo');
 
-            // Image
             const img = document.createElement('img');
             img.src = photo.url;
             img.alt = 'Photo enregistrée';
 
-            // Bouton de suppression
             const deleteButton = document.createElement('button');
             deleteButton.type = 'button';
             deleteButton.classList.add('delete-photo');
@@ -39,7 +37,6 @@ async function loadPhotos() {
                 deletePhoto(photo.id, container);
             });
 
-            // Date
             const date = document.createElement('p');
             date.classList.add('photo-date');
             date.textContent = new Date(photo.date).toLocaleString('fr-FR');
@@ -79,10 +76,8 @@ async function deletePhoto(photoId, container) {
             return;
         }
 
-        // Retirer la photo de la galerie
         container.remove();
 
-        // Message si la galerie est vide
         if (photoGallery.querySelectorAll('.saved-photo').length === 0) {
             photoGallery.textContent = 'Aucune photo enregistrée.';
         }
