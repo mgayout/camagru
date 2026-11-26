@@ -44,6 +44,11 @@ class LoginController
     {
         $errors = [];
 
+        if (!isset($_POST['csrf_token'], $_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+            http_response_code(403);
+            exit('Token CSRF invalide.');
+        }
+
         $username = $_SESSION['username'] ?? '';
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
@@ -102,6 +107,12 @@ class LoginController
     public function sendResetLink(): void
     {
         $errors = [];
+
+        if (!isset($_POST['csrf_token'], $_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+            http_response_code(403);
+            exit('Token CSRF invalide.');
+        }
+
         $success = false;
         $username = null;
 		$user_id = null;
@@ -184,6 +195,12 @@ class LoginController
     public function resetPassword(): void
     {
         $errors = [];
+
+        if (!isset($_POST['csrf_token'], $_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+            http_response_code(403);
+            exit('Token CSRF invalide.');
+        }
+
         $success = false;
         $token = $_POST['token'] ?? '';
         $new_password = $_POST['password'] ?? '';

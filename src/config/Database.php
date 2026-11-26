@@ -196,6 +196,39 @@ class Database
         return (bool) $statement->fetchColumn();
     }
 
+    public function getPhotosByUserId(int $user_id): array
+    {
+        $query = '
+            SELECT id, filename, created_at
+            FROM photos
+            WHERE user_id = :user_id
+            ORDER BY created_at DESC, id DESC';
+        
+        $statement = $this->connection->prepare($query);
+
+        $statement->execute([':user_id' => $user_id]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getPhotoByIdAndUserId(int $photoId, int $user_id): array|false
+    {
+        $query = '
+            SELECT id, filename
+            FROM photos
+            WHERE id = :id
+            AND user_id = :user_id';
+        
+        $statement = $this->connection->prepare($query);
+
+        $statement->execute([
+            ':id' => $photoId,
+            ':user_id' => $user_id
+        ]);
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
     // SETTERS
 
     public function setLikeOn(int $photo_id, int $user_id): bool
@@ -240,5 +273,36 @@ class Database
             ':user_id' => $user_id,
             ':content' => $content
         ]);
+    }
+
+    public function setPhoto(int $user_id, string $filename): bool
+    {
+        $query = '
+            INSERT INTO photos (user_id, filename)
+            VALUES (:user_id, :filename)';
+        
+        $statement = $this->connection->prepare($query);
+
+        return $statement->execute([
+            ':user_id' => $user_id,
+            ':filename' => $filename
+        ]);
+    }
+
+    public function deletePhotoByIdAndUserId(int $photo_id, int $user_id): bool
+    {
+        $query = '
+            DELETE FROM photos
+            WHERE id = :id
+            AND user_id = :user_id';
+        
+        $statement = $this->connection->prepare($query);
+
+        $statement->execute([
+            ':id' => $photo_id,
+            ':user_id' => $user_id
+        ]);
+
+        return $statement->rowCount() === 1;
     }
 }

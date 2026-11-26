@@ -65,7 +65,21 @@ class GalleryController
             return;
         }
 
+        if (!isset($_POST['csrf_token'], $_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+            http_response_code(403);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Token CSRF invalide.'
+            ]);
+            return;
+        }
+
         $photo_id = filter_var($_POST['photo_id'] ?? null, FILTER_VALIDATE_INT);
+
+        if ($photo_id === false || $photo_id <= 0) {
+            http_response_code(400);
+            return;
+        }
 
         try {
             $user_id = (int) $_SESSION['user_id'];
@@ -113,7 +127,22 @@ class GalleryController
             return;
         }
 
+        if (!isset($_POST['csrf_token'], $_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+            http_response_code(403);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Token CSRF invalide.'
+            ]);
+            return;
+        }
+
         $photo_id = filter_var($_POST['photo_id'] ?? null, FILTER_VALIDATE_INT);
+
+        if ($photo_id === false || $photo_id <= 0) {
+            http_response_code(400);
+            return;
+        }
+
         $data = trim($_POST['content'] ?? '');
 
         if ($data === '' || mb_strlen($data) > 1000) {
