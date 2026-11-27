@@ -24,6 +24,21 @@ footer {
 }
 
 body > main {
-    flex: 1;
+    flex: 1 0 auto;
     min-height: 0;
+    width: 100%;
+}
+
+@media screen and (max-width: 900px) {
+    body > main {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    body > main {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 }

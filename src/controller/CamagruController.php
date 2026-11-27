@@ -31,6 +31,10 @@ class CamagruController
         $errors = [];
         $user_id = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null;
 
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+
         $this->renderCamagru($errors, $user_id);
     }
 
@@ -154,6 +158,10 @@ class CamagruController
 
         if (!$photoInfo || !in_array($photoInfo[2], [IMAGETYPE_JPEG, IMAGETYPE_PNG], true)) {
             throw new InvalidArgumentException('Photo principale invalide.');
+        }
+
+        if (!$photoInfo || $photoInfo[0] > 6000 || $photoInfo[1] > 6000 || ($photoInfo[0] * $photoInfo[1]) > 20000000) {
+            throw new InvalidArgumentException('Dimensions de photo non autorisées.');
         }
 
         $finfo = new finfo(FILEINFO_MIME_TYPE);

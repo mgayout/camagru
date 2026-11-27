@@ -171,6 +171,21 @@ class Database
         return $statement->fetchColumn();
     }
 
+    public function getEmailByPhotoId(int $photo_id): string
+    {
+        $query = '
+            SELECT users.email
+            FROM photos
+            INNER JOIN users ON photos.user_id = users.id
+            WHERE photos.id = :photo_id
+        ';
+
+        $statement = $this->connection->prepare($query);
+        $statement->execute(['photo_id' => $photo_id]);
+
+        return $statement->fetchColumn();
+    }
+
     public function getNotificationStatus(string $username, string $like_or_comment): bool
     {
         $columns = [

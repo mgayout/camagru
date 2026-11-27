@@ -6,6 +6,7 @@
 <script type="module" src="/scripts/camagru/editor.js" defer></script>
 <script type="module" src="/scripts/camagru/gallery.js" defer></script>
 <main>
+    <input type="hidden" id="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
     <div class="left-sidebar">
         <button id="back" type="button" hidden>Retour</button>
         <button id="startCamera" type="button">Activer la webcam</button>

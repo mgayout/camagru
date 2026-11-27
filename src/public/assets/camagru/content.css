@@ -9,12 +9,23 @@
     justify-content: center;
     align-items: center;
 
-    gap: 15px;
-
     min-width: 0;
     min-height: 0;
 
     overflow: hidden;
+}
+
+#cameraContainer {
+    width: 100%;
+
+    flex: 1;
+
+    min-width: 0;
+    min-height: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #takePhoto {
@@ -24,6 +35,8 @@
     height: 40px;
 
     padding: 0;
+
+    margin: 15px 0;
 
     border-radius: 50%;
 
@@ -38,8 +51,25 @@
 
     padding: 0;
 
+    margin: 10px 0;
+
     flex-shrink: 0;
 
     position: relative;
     z-index: 2;
+}
+
+@media screen and (max-width: 600px) {
+    .content {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    #takePhoto {
+        margin: 10px 0;
+    }
+
+    #publishPhoto {
+        margin: 10px 0;
+    }
 }

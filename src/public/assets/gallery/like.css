@@ -1,12 +1,15 @@
+
 .photo-actions {
     position: absolute;
-    inset: 0;
+
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 
     display: flex;
     justify-content: center;
     align-items: center;
-
-    gap: 25px;
 
     z-index: 5;
 
@@ -22,8 +25,7 @@
         visibility 0.2s ease;
 }
 
-.photo-image-container:hover .photo-actions,
-.photo-image-container:focus-within .photo-actions {
+.photo-image-container:hover .photo-actions {
     opacity: 1;
     visibility: visible;
 
@@ -45,12 +47,12 @@
     justify-content: center;
     align-items: center;
 
-    gap: 7px;
-
     min-width: 60px;
     height: 60px;
 
     padding: 10px;
+
+    margin: 0 12px;
 
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 50%;
@@ -106,12 +108,12 @@
     justify-content: center;
     align-items: center;
 
-    gap: 7px;
-
     min-width: 60px;
     height: 60px;
 
     padding: 10px;
+
+    margin: 0 12px;
 
     box-sizing: border-box;
 
@@ -124,4 +126,37 @@
 
     font-size: 12px;
     font-weight: 600;
+}
+
+@media screen and (max-width: 600px) {
+    .photo-actions {
+        opacity: 1;
+        visibility: visible;
+
+        pointer-events: auto;
+
+        background: transparent;
+    }
+
+    .photo-actions button {
+        min-width: 45px;
+        height: 45px;
+
+        padding: 7px;
+        margin: 0 8px;
+    }
+
+    .photo-actions button img,
+    .photo-counter img {
+        width: 22px;
+        height: 22px;
+    }
+
+    .photo-counter {
+        min-width: 45px;
+        height: 45px;
+
+        padding: 7px;
+        margin: 0 8px;
+    }
 }

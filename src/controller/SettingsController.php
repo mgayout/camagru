@@ -5,13 +5,13 @@ class SettingsController
     public function index(): void
     {
 
-		$username = $_SESSION['username'] ?? null;
+        $username = $_SESSION['username'] ?? null;
         $email = $_SESSION['email'] ?? null;
-		$user_id = $_SESSION['user_id'] ?? null;
+        $user_id = $_SESSION['user_id'] ?? null;
 
-		$title = 'Paramètres';
-		$headerView	= isset($user_id) ? HEADERON_VIEW : HEADEROFF_VIEW;
-		$mainView	= SETTINGS_VIEW;
+        $title = 'Paramètres';
+        $headerView	= isset($user_id) ? HEADERON_VIEW : HEADEROFF_VIEW;
+        $mainView	= SETTINGS_VIEW;
 
         $commentNotification = false;
         $likeNotification = false;
@@ -32,7 +32,13 @@ class SettingsController
         if ($data === null)
             return;
 
-        $username = trim($data['username'] ?? '');
+        if (!isset($data['username']) || !is_string($data['username'])) {
+            http_response_code(400);
+            echo json_encode(['success' => false]);
+            return;
+        }
+
+        $username = trim($data['username']);
 
         $registerModel = new RegisterController();
 
@@ -59,7 +65,13 @@ class SettingsController
         if ($data === null)
             return;
 
-        $email = trim($data['email'] ?? '');
+        if (!isset($data['email']) || !is_string($data['email'])) {
+            http_response_code(400);
+            echo json_encode(['success' => false]);
+            return;
+        }
+
+        $email = trim($data['email']);
 
         $registerModel = new RegisterController();
 
@@ -85,6 +97,13 @@ class SettingsController
 
         if ($data === null)
             return;
+
+        if (!isset($data['current_password'], $data['new_password'], $data['confirm_password']) ||
+            !is_string($data['current_password']) || !is_string($data['new_password']) || !is_string($data['confirm_password'])) {
+            http_response_code(400);
+            echo json_encode(['success' => false]);
+            return;
+        }
 
         $current_password = $data['current_password'] ?? '';
         $new_password = $data['new_password'] ?? '';
@@ -140,6 +159,18 @@ class SettingsController
 
     public function delete(): void
     {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit;
+        }
+
+        $csrfToken = $_POST['csrf_token'] ?? '';
+
+        if (!is_string($csrfToken) || !isset($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $csrfToken)) {
+            http_response_code(403);
+            exit;
+        }
+
         if (!isset($_SESSION['user_id'])) {
             header('Location: /login');
             exit;
@@ -150,7 +181,6 @@ class SettingsController
         if ($user->delete((int) $_SESSION['user_id'])) {
             $_SESSION = [];
             session_destroy();
-
             header('Location: /');
             exit;
         }
@@ -163,14 +193,26 @@ class SettingsController
     {
         header('Content-Type: application/json; charset=utf-8');
 
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false]);
+            return null;
+        }
+
         if (!isset($_SESSION['user_id'])) {
             http_response_code(401);
             echo json_encode(['success' => false]);
             return null;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
+        $csrfToken = $_POST['csrf_token'] ?? '';
+
+        if (
+            !is_string($csrfToken) ||
+            !isset($_SESSION['csrf_token']) ||
+            !hash_equals($_SESSION['csrf_token'], $csrfToken)
+        ) {
+            http_response_code(403);
             echo json_encode(['success' => false]);
             return null;
         }

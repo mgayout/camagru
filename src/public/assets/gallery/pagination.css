@@ -1,10 +1,10 @@
+
 .gallery-pagination {
     display: flex;
     justify-content: center;
     align-items: center;
 
     flex-wrap: wrap;
-    gap: 8px;
 
     margin-top: 40px;
     padding-bottom: 20px;
@@ -20,6 +20,8 @@
     height: 38px;
 
     padding: 0 12px;
+
+    margin: 4px;
 
     box-sizing: border-box;
 
@@ -48,4 +50,20 @@
     background: #16a34a;
     color: white;
     pointer-events: none;
+}
+
+@media screen and (max-width: 600px) {
+    .gallery-pagination {
+        margin-top: 25px;
+    }
+
+    .pagination-button,
+    .pagination-number {
+        min-width: 34px;
+        height: 34px;
+
+        padding: 0 9px;
+
+        font-size: 13px;
+    }
 }

@@ -2,7 +2,6 @@
 .right-sidebar {
     width: 20%;
 
-    height: fit-content;
     max-height: 85%;
 
     flex-shrink: 0;
@@ -31,13 +30,12 @@
     width: 100%;
 
     flex: 0 1 auto;
+
     min-height: 0;
     max-height: 500px;
 
     display: flex;
     flex-direction: column;
-
-    gap: 12px;
 
     overflow-y: auto;
     overflow-x: hidden;
@@ -56,7 +54,7 @@
     border-radius: 8px;
     overflow: hidden;
 
-    transition: transform 0.2s;
+    margin-bottom: 12px;
 }
 
 .saved-photo:hover {
@@ -102,6 +100,7 @@
     cursor: pointer;
 
     opacity: 0;
+
     transition: opacity 0.2s, background-color 0.2s;
 }
 
@@ -121,19 +120,64 @@
     text-align: center;
 }
 
-#photoGallery::-webkit-scrollbar {
-    width: 6px;
+@media screen and (max-width: 900px) {
+    .right-sidebar {
+        width: 22%;
+        padding: 5px;
+    }
+
+    #photoGallery {
+        max-height: 400px;
+    }
 }
 
-#photoGallery::-webkit-scrollbar-track {
-    background: transparent;
-}
+@media screen and (max-width: 600px) {
+    .right-sidebar {
+        width: 100%;
+        max-height: none;
 
-#photoGallery::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 10px;
-}
+        align-self: stretch;
 
-#photoGallery::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+        margin: 10px 0;
+        padding: 5px;
+
+        overflow: visible;
+    }
+
+    .right-sidebar h3 {
+        margin-bottom: 10px;
+    }
+
+    #photoGallery {
+        width: 100%;
+
+        max-height: 250px;
+
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        justify-content: flex-start;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .saved-photo {
+        width: 31%;
+
+        margin: 1%;
+    }
+
+    .saved-photo:hover {
+        transform: none;
+    }
+
+    .delete-photo {
+        opacity: 1;
+
+        width: 24px;
+        height: 24px;
+
+        font-size: 16px;
+    }
 }

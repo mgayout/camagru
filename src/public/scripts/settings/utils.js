@@ -1,10 +1,22 @@
 export async function sendSettingsRequest(url, data) {
+
+    const csrfToken = document.getElementById('csrf_token')?.value;
+
+    if (!csrfToken) {
+        throw new Error('Token CSRF introuvable.');
+    }
+
+    const formData = new URLSearchParams({
+        ...data,
+        csrf_token: csrfToken
+    });
+
     const response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: new URLSearchParams(data)
+        body: formData
     });
 
     const text = await response.text();

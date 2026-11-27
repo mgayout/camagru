@@ -66,20 +66,13 @@
 				exit;
 			}
 
-			// Vérification CSRF pour les requêtes POST
 			if ($method === 'POST') {
 
 				$sessionToken = $_SESSION['csrf_token'] ?? '';
 				$requestToken = $_POST['csrf_token'] ?? '';
 
-				if (
-					!is_string($sessionToken) ||
-					!is_string($requestToken) ||
-					$sessionToken === '' ||
-					!hash_equals($sessionToken, $requestToken)
-				) {
+				if (!is_string($sessionToken) || !is_string($requestToken) || $sessionToken === '' || !hash_equals($sessionToken, $requestToken)) {
 					http_response_code(403);
-
 					echo 'Requête CSRF invalide.';
 					return;
 				}

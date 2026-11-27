@@ -1,66 +1,146 @@
-# camagru
+# Camagru
 
-TODO : 
+## 📖 Description
 
-- Common features 
+Camagru est un projet d'application web de montage photo.
 
-- [X] Sauvegarde des mdp crypté dans la db
-- [ ] Prévention des injections XSS
-- [ ] Protection sur le téléchargement de fichier non souhaité
-- [ ] Prévention des injections SQL
-- [ ] Prévention contre tout types de requêtes externes
+L'application permet aux utilisateurs de prendre des photos via leur webcam ou d'importer une image, puis d'y superposer différents filtres ou éléments graphiques. Les créations sont publiées dans une galerie commune où elles peuvent être consultées, aimées et commentées par les autres utilisateurs.
 
-- User features
+---
 
-- [X] Création d'un utilisateur
-    - [X] Adresse email valide
-    - [X] Nom d'utilisateur unique
-    - [X] Mot de passe complexe
-- [X] Envoi d'un mail pour valider la création du compte
-- [X] Connexion à la plateforme
-- [X] Mail de renouvellement de mdp
-- [X] Déconnexion en 1 clic
-- [X] Modification du mail, nom utilisateur ou mdp
+## ✨ Fonctionnalités
 
-- Galery features
+### Utilisateurs
 
-- [X] Création d'une gallerie de photos (utilisateur non connecté)
-    - [X] Commenter un poste
-    - [X] Liker un poste
-- [X] Affichage du contenu pour tous
-- [X] Contenu trier par date
-- [X] Notification par mail d'un like et commentaire
-    - [X] Modifiable dans les parametre du compte
-- [X] Minimum 5 éléments par page
+- Inscription avec validation par email
+- Connexion / Déconnexion
+- Réinitialisation du mot de passe
+- Modification du profil
+- Modification du mot de passe
+- Gestion des préférences utilisateur
 
-- Editing features
+### Édition d'images
 
-- [X] Accessible uniquement par les profils connectés
-    - [X] Rejet des profils non connectés
+- Capture d'image via webcam
+- Import d'image locale
+- Sélection de filtres/stickers
+- Fusion des images côté serveur
+- Suppression de ses propres créations
 
-- Main :
-- [X] Bouton Webcam
-- [X] Bouton Image PC
-- [X] Liste des éléments supperposables
+### Galerie
 
-- Side : 
-- [X] Affichage des Images et/ou capture webcam
+- Affichage des créations de tous les utilisateurs
+- Pagination
+- Likes
+- Commentaires
+- Notification par email à chaque nouveaux likes/commentaires
 
-- [X] Nécessite au moins 1 éléments supperposables pour que l'image soit valide
-- [X] La superposition doit se faire côté server
+### Sécurité
 
-- Constraints and Mandatory things
+- Protection contre les injections SQL
+- Protection contre le XSS
+- Validation des formulaires
+- Hashage sécurisé des mots de passe
+- Gestion des permissions utilisateur
 
-- [X] [SERVER] [LANGUAGE] PHP standard library
-- [X] [SERVER] [FRAMEWORK] PHP standard library
-- [X] [CLIENT] [LANGUAGE] HTML, CSS, JavaScript (Natives API)
-- [X] [CLIENT] [FRAMEWORK] CSS, no forbidden JavaScript
-- [X] [DOCKER] Déploiement du site avec 1 commande (docker-compose)
 
-- Bonus (Idée PDF)
+---
 
-- [ ] Rendre les échanges avec le serveur dynamiques grâce à AJAX, sans recharger toute la page.
-- [ ] Afficher en temps réel les modifications directement sur l'aperçu de la webcam.
-- [ ] Mettre en place un défilement infini dans la galerie.
-- [ ] Permettre aux utilisateurs de partager leurs images sur les réseaux sociaux.
-- [ ] Générer ou afficher une image GIF animée.
+## 🏗️ Architecture
+
+### Structure générale
+
+```text
+camagru/
+├── Dockerfile
+├── docker-compose.yml
+├── docker/                         # Configuration Apache et msmtp
+├── src/
+|     ├── config/                   # Gestion des routes, de l'utilisateur, ...
+|     ├── controller/               # Contrôleurs MVC
+|     ├── database/                 # Base de donnée SQL
+|     ├── public/                   # Images, Scripts, Assets, ...
+|     └── view/                     # Vues MVC
+└─ Makefile
+```
+### Architecture MVC
+
+Le projet suit une architecture MVC (Model - View - Controller) afin de séparer les responsabilités et faciliter la maintenance du code.
+
+- **Models** : gèrent les interactions avec la base de données et la logique métier.
+- **Views** : responsables de l'affichage des pages HTML et de l'interface utilisateur.
+- **Controllers** : reçoivent les requêtes utilisateur, exécutent les traitements nécessaires via les modèles puis sélectionnent la vue appropriée.
+
+Cette organisation permet de conserver un code structuré, réutilisable et facilement évolutif.
+
+---
+
+## 🚀 Lancement du projet
+
+### Construction et démarrage
+
+Construire l'image Docker puis lancer les conteneurs :
+
+```bash
+make
+```
+
+L'application sera ensuite disponible à l'adresse :
+
+```text
+http://localhost:8080
+```
+
+### Commandes disponibles
+
+| Commande | Description |
+|-----------|------------|
+| `make` | Construit l'image si nécessaire puis lance l'application |
+| `make build` | Construit les images Docker |
+| `make front` | Reconstruit et redémarre le service web |
+| `make back` | Reconstruit et redémarre le service web |
+| `make re` | Recrée entièrement les conteneurs |
+| `make down` | Arrête les conteneurs |
+| `make reset` | Réinitialise la base de données et relance l'application |
+
+### Services disponibles
+
+Une fois les conteneurs démarrés, plusieurs interfaces sont accessibles :
+
+| Service | Adresse | Description |
+|----------|----------|------------|
+| Camagru | http://localhost:8080 | Application principale |
+| phpMyAdmin | http://localhost:8081 | Administration de la base de données MariaDB |
+| MailHog | http://localhost:8025 | Interface de consultation des emails envoyés par l'application |
+
+## 📸 Aperçu
+
+
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/login.png" width="400">
+      <br>
+      <strong>Page de connexion</strong>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/settings.png" width="400">
+      <br>
+      <strong>Paramètres</strong>
+    </td>
+  </tr>
+  <tr>
+      <td align="center" width="50%">
+      <img src="docs/editor.png" width="400">
+      <br>
+      <strong>Création d'un montage</strong>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/gallery.png" width="400">
+      <br>
+      <strong>Galerie</strong>
+    </td>
+  </tr>
+</table>
+

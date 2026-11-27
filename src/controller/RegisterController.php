@@ -19,12 +19,23 @@ class RegisterController
 		$user_id = $_SESSION['user_id'] ?? null;
         $email = $_SESSION['email'] ?? null;
 
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+
         $this->renderRegister($errors, $username, $user_id, $email);
     }
 
     public function register(): void
     {
         $errors = [];
+
+        $csrfToken = $_POST['csrf_token'] ?? '';
+
+        if (!is_string($csrfToken) || !isset($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $csrfToken)) {
+            http_response_code(403);
+            exit('Requête invalide.');
+        }
 
         $username = trim($_POST['username'] ?? '');
         $email = trim($_POST['email'] ?? '');

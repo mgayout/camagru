@@ -9,13 +9,10 @@
     justify-content: center;
     align-items: center;
 
-    gap: 15px;
+    min-width: 0;
 }
 
-#startCamera {
-    background: #16a34a;
-}
-
+#startCamera,
 #importImage {
     background: #16a34a;
 }
@@ -23,6 +20,12 @@
 #startCamera.camera-on,
 #back {
     background: #dc2626;
+}
+
+.left-sidebar > button {
+    width: 90%;
+    max-width: 220px;
+    margin: 7px 0;
 }
 
 #stickerGallery {
@@ -33,19 +36,20 @@
 }
 
 #stickerList {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
 
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 10px;
     margin-top: 10px;
+}
+
+#stickerList .sticker-item {
+    width: 30%;
+    margin: 1.5%;
 }
 
 #elementControls {
     display: flex;
     flex-direction: column;
-
-    gap: 10px;
 
     margin-top: 20px;
     width: 100%;
@@ -54,16 +58,69 @@
 #elementControls label {
     font-size: 14px;
     font-weight: 600;
+
+    margin-bottom: 10px;
 }
 
 #elementSize {
     width: 100%;
 
     cursor: pointer;
-    accent-color: #16a34a;
 }
 
 #elementSize:disabled {
     cursor: not-allowed;
     opacity: 0.4;
+}
+
+@media screen and (max-width: 900px) {
+    .left-sidebar {
+        width: 18%;
+    }
+
+    .left-sidebar > button {
+        width: 100%;
+        padding: 10px 5px;
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .left-sidebar {
+        width: 100%;
+
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .left-sidebar > button {
+        width: 45%;
+        max-width: none;
+
+        margin: 5px 2%;
+        padding: 12px 5px;
+    }
+
+    #stickerGallery {
+        width: 100%;
+        max-width: none;
+
+        margin-top: 10px;
+    }
+
+    #stickerList {
+        justify-content: center;
+    }
+
+    #stickerList .sticker-item {
+        width: 18%;
+        margin: 1%;
+    }
+
+    #elementControls {
+        width: 100%;
+        margin-top: 10px;
+    }
 }

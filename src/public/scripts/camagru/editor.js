@@ -10,6 +10,8 @@ const overlay = document.getElementById("overlay");
 
 const publishPhoto = document.getElementById("publishPhoto");
 
+const csrfToken = document.getElementById("csrf_token").value;
+
 let overlayX = 0;
 let overlayY = 0;
 
@@ -318,6 +320,8 @@ publishPhoto.addEventListener("click", async () => {
         const photoBlob = await photoResponse.blob();
 
         const formData = new FormData();
+
+        formData.append("csrf_token", csrfToken);
 
         formData.append("photo", photoBlob, "photo.jpg");
         formData.append("sticker", selectedSticker.filename);

@@ -1,40 +1,30 @@
-<link rel="stylesheet" href="/assets/settings.css">
+<link rel="stylesheet" href="/assets/settings/settings.css">
 <script type="module" src="scripts/settings/sidebar_animation.js" defer></script>
 <script type="module" src="scripts/settings/events.js" defer></script>
 <main class="account-settings">
-
+    <input type="hidden" id="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
     <div class="settings-header">
         <h1>Paramètres du compte</h1>
         <p>Gérez vos informations personnelles et vos préférences.</p>
     </div>
-
     <div class="settings-container">
-
-        <!-- SIDEBAR -->
         <aside class="settings-sidebar">
             <nav>
                 <a href="#profile" class="settings-link active" data-section="profile">
                     👤 Informations personnelles
                 </a>
-
                 <a href="#security" class="settings-link" data-section="security">
                     🔒 Sécurité
                 </a>
-
                 <a href="#notifications" class="settings-link" data-section="notifications">
                     🔔 Notifications
                 </a>
-
                 <a href="#delete-account" class="settings-link danger-link" data-section="delete-account">
                     🗑️ Supprimer mon compte
                 </a>
             </nav>
         </aside>
-
-        <!-- CONTENU DES PARAMÈTRES -->
         <div class="settings-content">
-
-            <!-- PROFIL -->
             <section class="settings-card settings-panel active" id="profile">
                 <h2>Informations personnelles</h2>
                 <p class="section-description">
@@ -47,7 +37,7 @@
                         id="username"
                         name="username"
                         data-setting="username"
-                        value="<?= htmlspecialchars($user['username'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                        value=""
                         maxlength="50"
                         required>
                 </div>
@@ -61,7 +51,7 @@
                         id="email"
                         name="email"
                         data-setting="email"
-                        value="<?= htmlspecialchars($user['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                        value=""
                         maxlength="50"
                         required>
                 </div>
@@ -69,8 +59,6 @@
                     Enregistrer la modification
                 </button>
             </section>
-
-            <!-- SÉCURITÉ -->
             <section class="settings-card settings-panel" id="security" hidden>
                 <h2>Sécurité</h2>
                 <p class="section-description">
@@ -111,8 +99,6 @@
                     </button>
                 </div>
             </section>
-
-            <!-- NOTIFICATIONS -->
             <section class="settings-card settings-panel" id="notifications" hidden>
                 <h2>Notifications par e-mail</h2>
                 <p class="section-description">
@@ -141,22 +127,19 @@
                         <?= !empty($likeNotification) ? 'checked' : '' ?>>
                 </label>
             </section>
-
-            <!-- SUPPRESSION DU COMPTE -->
             <section class="settings-card settings-panel danger-card"
                 id="delete-account" hidden>
                 <h2>Supprimer mon compte</h2>
                 <p>
                     Cette action peut entraîner la perte définitive de tes données.
                 </p>
-
                 <form action="/delete" method="POST">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                     <button type="submit" class="btn-danger">
                         Supprimer mon compte
                     </button>
                 </form>
             </section>
-
         </div>
     </div>
 </main>

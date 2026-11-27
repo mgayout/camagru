@@ -10,6 +10,8 @@ footer {
     justify-content: center;
     align-items: center;
 
+    padding: 15px;
+
     background-color: #1e293b;
     color: #e2e8f0;
 
@@ -22,4 +24,18 @@ footer p {
     font-size: 0.95rem;
     font-weight: 500;
     letter-spacing: 0.5px;
+
+    text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+    footer {
+        height: auto;
+        min-height: 70px;
+        padding: 20px 10px;
+    }
+
+    footer p {
+        font-size: 0.8rem;
+    }
 }

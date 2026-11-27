@@ -33,6 +33,10 @@ class LoginController
     {
         $errors = [];
 
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+
 		$username = $_SESSION['username'] ?? null;
 		$user_id = $_SESSION['user_id'] ?? null;
         $email = $_SESSION['email'] ?? null;
@@ -43,11 +47,6 @@ class LoginController
     public function login(): void
     {
         $errors = [];
-
-        if (!isset($_POST['csrf_token'], $_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-            http_response_code(403);
-            exit('Token CSRF invalide.');
-        }
 
         $username = $_SESSION['username'] ?? '';
         $email = trim($_POST['email'] ?? '');

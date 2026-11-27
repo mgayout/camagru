@@ -83,7 +83,7 @@ class GalleryController
 
         try {
             $user_id = (int) $_SESSION['user_id'];
-            $email = $_SESSION['email'] ?? null;
+            $email = $this->database->getEmailByPhotoId($photo_id);
             $username = $_SESSION['username'] ?? null;
             $receiver = $this->database->getUsernameByPhotoId($photo_id);
             $currentPage = filter_var($_POST['page'] ?? 1, FILTER_VALIDATE_INT);
@@ -149,13 +149,13 @@ class GalleryController
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'message' => 'Le commentaire doit contenir entre 1 et 1000 caractères.'
-            ]);
+                'message' => 'Le commentaire doit contenir entre 1 et 1000 caractères.']);
+                return;
         }
 
         try {
             $user_id = (int) $_SESSION['user_id'];
-            $email = $_SESSION['email'] ?? null;
+            $email = $this->database->getEmailByPhotoId($photo_id);
             $username = $_SESSION['username'] ?? null;
             $receiver = $this->database->getUsernameByPhotoId($photo_id);
             $currentPage = filter_var($_POST['page'] ?? 1, FILTER_VALIDATE_INT);

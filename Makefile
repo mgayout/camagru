@@ -32,6 +32,8 @@ down:
 	docker compose down
 
 reset:
+	@sudo rm -rf src/public/uploads/*
+	@echo "Suppression des photos depuis le dossier uploads/"
 	@echo "Réinitialisation de la database."
 	docker compose down -v
 	docker compose up -d

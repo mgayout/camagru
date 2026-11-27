@@ -8,13 +8,13 @@ main {
     position: relative;
 
     width: 100%;
-    flex: 1;
+    flex: 1 0 auto;
+
     min-height: 0;
     min-width: 0;
 
     margin: 0;
     padding: 20px;
-    gap: 20px;
 
     overflow: hidden;
 }
@@ -48,8 +48,19 @@ main button {
     overflow: hidden;
 }
 
+#webcam {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+    object-position: center;
+}
+
 #photoView {
     width: 100%;
+
     flex: 1;
 
     min-width: 0;
@@ -58,6 +69,8 @@ main button {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    overflow: hidden;
 }
 
 .editor {
@@ -70,7 +83,8 @@ main button {
 
     overflow: hidden;
 
-    touch-action: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
     user-select: none;
 }
 
@@ -96,13 +110,14 @@ main button {
 
     cursor: move;
 
-    touch-action: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
     user-select: none;
 }
 
 .sticker-item {
     width: 100%;
-    aspect-ratio: 1 / 1;
+    height: auto;
 
     padding: 5px;
 
@@ -115,8 +130,10 @@ main button {
 }
 
 .sticker-item img {
+    display: block;
+
     width: 100%;
-    height: 100%;
+    height: auto;
 
     object-fit: contain;
 }
@@ -125,29 +142,45 @@ main button {
     border-color: #16a34a;
 }
 
-#webcam {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: contain;
-    object-position: center;
-}
-
-#cameraContainer {
-    width: 100%;
-
-    flex: 1;
-
-    min-width: 0;
-    min-height: 0;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 [hidden] {
     display: none !important;
+}
+
+@media screen and (max-width: 900px) {
+    main {
+        padding: 15px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    main {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+
+        padding: 15px 10px;
+
+        overflow: visible;
+    }
+
+    .content {
+        width: 100%;
+        min-height: 300px;
+        height: 55vh;
+
+        flex: none;
+
+        margin: 15px 0;
+    }
+
+    .visual-container,
+    #cameraContainer {
+        width: 100%;
+        height: 100%;
+    }
+
+    #photoView {
+        width: 100%;
+        height: 100%;
+    }
 }

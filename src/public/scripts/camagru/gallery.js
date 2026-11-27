@@ -65,7 +65,8 @@ async function deletePhoto(photoId, container) {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: new URLSearchParams({
-                id: photoId
+                id: photoId,
+                csrf_token: document.getElementById('csrf_token').value
             })
         });
 

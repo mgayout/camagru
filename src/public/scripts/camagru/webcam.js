@@ -166,8 +166,8 @@ photoInput.addEventListener("change", () => {
         return;
     }
 
-    if (file.size > 15 * 1024 * 1024) {
-        alert("L'image ne doit pas dépasser 15 Mo.");
+    if (file.size > 5 * 1024 * 1024) {
+        alert("L'image ne doit pas dépasser 5 Mo.");
         photoInput.value = "";
         return;
     }
